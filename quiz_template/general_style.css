@@ -1,0 +1,100 @@
+.everything {
+    display: flex;
+    width: 100vw;
+    height: auto;
+
+}
+
+body {
+
+    text-align:center;
+    position: relative;
+    padding: 0px;
+}
+
+div {
+    border-radius: 5vmin;
+    font-size: 3vmin;
+    text-align: center;
+}
+
+
+
+label {
+    font-size: 3vmin;
+    text-align:left;
+}
+
+.button
+{
+    position: relative;
+    font-size: 3vmin;
+    text-align: center;
+    bottom: 0px;
+    left: 1vw;
+    margin:auto;
+    width: auto;
+    height: 5vh;
+
+    border-radius: 1vmin;
+}
+
+button
+{
+    position: relative;
+    text-align: center;
+    margin:auto;
+    border-radius: 5vmin;
+    font-size:6vw;
+    height:20vh;
+    width:38vw;
+}
+
+.problem {
+    border-radius: 5vmin;
+    font-size:7vw;
+    margin:0px;
+}
+
+.correct:active { animation-duration: 0.25s;
+    animation-name: blink-green;
+    animation-iteration-count: 1;}
+.incorrect:active {animation-duration: 0.25s;
+    animation-name: blink-red;
+    animation-iteration-count: 1;}
+
+@keyframes blink-green {
+    from {
+        background: green;
+    }
+
+    to {
+        background: white;
+    }
+}
+
+@keyframes blink-red {
+    from {
+        background: red;
+    }
+
+    to {
+        background: white;
+    }
+}
+
+#problem {
+    display:inline-block;
+    overflow:hidden;
+    width:100%;
+    border-radius:5vw;
+    background-color:rgba(255, 255, 255, 0.5);
+}
+
+#lives, #points, #safeTimerDisplay {
+    font-size: 3vmin;
+}
+
+h1 {
+    font-size: 3vmin;
+}
