@@ -1,20 +1,29 @@
-document.body.addEventListener("load",load);
-document.body.addEventListener("resize",() => {return false;});
+var lb_name="cmpQuiz";
+var lb_label_ru="Лучшие математики";
+var lb_label_en="Best at maths";
+var ya_flag=1;
 
-let points = 0;
-let lives = 3;
+window.prev_score=0;
 
-function lose(lb_name) {
+document.addEventListener("DOMContentLoaded",load);
+window.addEventListener("resize",() => {return false;});
 
-    set_leaderboard(1,lb_name,Math.max(points,window.prev_score),ysdk.features.GameplayAPI?.stop);
+points = 0;
+lives = 3;
+
+function lose() {
+    var value = Math.max(points,window.prev_score);
+    console.log("Points to record after losing: "+value);
+    set_leaderboard(ya_flag,lb_name,value,()=>{},1);
     document.getElementById("lives").textContent=setText("Вы проиграли. Начать новую игру?", "You lost. Play again?");
 
     var btn2 = document.createElement("button");
     btn2.className = btn2.className + "button";
 
     btn2.textContent=setText("Ага","Ok");
-    btn2.onclick = function() {document.getElementById(d.id).style.display = "none";
-        show_ads(1, () => {document.body.removeChild(document.getElementById("leaderboard"));
+    btn2.onclick = function() {
+        document.getElementById("game").removeChild(document.getElementById("problem"))
+        show_ads(ya_flag, () => {document.body.removeChild(document.getElementById("leaderboard"));
             loadFunction();})
 
     };
@@ -40,23 +49,72 @@ function setTimer(){
     }, 10);
 }
 
-function newGame(lb_name) {
+function newGame() {
     console.log("New game");
     lives = 3;
     points = 0;
     document.getElementById("points").textContent=setText("Счет: ","Count: ")+points;
     document.getElementById("lives").textContent=setText("Осталось жизней: ","Lives left: ")+String.fromCodePoint(10084).repeat(lives);
-    get_leaderboard(1, lb_name, ysdk.features.GameplayAPI?.start);
+    get_leaderboard(ya_flag, lb_name, 1);
 
     displayProblem();
 }
 
 function getRandomProblem() {
-    //logic here
-    return {"problem":problem,"correct_answer":correct_answer,"other_answer":other_answer}
+    //Cmp two numbers, 3>2, -2>-3, 1/2 > 1/3, 2<3
+    var property = Math.random(); // 0 to 0.5 "more", 0.5 to 1 "less"
+    var minus = Math.random(); // 0 to 0.5 "positive", 0.5 to 1 "negative"
+    var degree = Math.random(); // 0 to 0.5 "1", 0.5 to 1 "-1"
+
+    var problem;
+    var correct_answer;
+    var other_answer;
+    var no_1 = 1+randomInt(8);
+    var no_2 = 1+randomInt(8);
+    while (no_2==no_1) no_2 = 1+randomInt(8);
+    var first_no_bigger=(no_1>no_2);
+    problem = setText("Что "+(property<=0.5? "больше" : "меньше"), "What's "+(property<=0.5? "more" : "less"))+"?";
+    var correct_no;
+    var other_no;
+    if (property <= 0.5) {
+        if (first_no_bigger) {
+            correct_no = ((minus<=0.5) == (degree <=0.5)) ? no_1 : no_2;
+            other_no = ((minus<=0.5) == (degree <=0.5)) ? no_2 : no_1;
+        }
+        else {
+            correct_no = ((minus<=0.5) == (degree <=0.5)) ? no_2 : no_1;
+            other_no = ((minus<=0.5) == (degree <=0.5)) ? no_1 : no_2;
+        }
+    }
+    else {
+        if (first_no_bigger) {
+            correct_no = ((minus<=0.5) == (degree <=0.5)) ? no_2 : no_1;
+            other_no = ((minus<=0.5) == (degree <=0.5)) ? no_1 : no_2;
+        }
+        else {
+            correct_no = ((minus<=0.5) == (degree <=0.5)) ? no_1 : no_2;
+            other_no = ((minus<=0.5) == (degree <=0.5)) ? no_2 : no_1;
+        }
+
+    }
+
+    if (degree>0.5) {
+        correct_answer="<sup>1</sup>&frasl;<sub>"+correct_no+"</sub>";
+        other_answer="<sup>1</sup>&frasl;<sub>"+other_no+"</sub>";
+    }
+    else {
+        correct_answer=""+correct_no+"";
+        other_answer=""+other_no+"";
+    }
+    if (minus>0.5) {
+        correct_answer="&minus;"+correct_answer;
+        other_answer="&minus;"+other_answer;
+    }
+
+    return {"problem":problem,"correct_answer":correct_answer,"other_answer":other_answer};
 }
 
-function displayCorrect(id, lb_name) {
+function displayCorrect(id) {
     clearInterval(window.timer);
     document.getElementById("right_button").removeAttribute("class");
     document.getElementById("left_button").removeAttribute("class");
@@ -64,13 +122,13 @@ function displayCorrect(id, lb_name) {
     points +=points_earned;
     if (points > window.prev_score)
     {
-        set_leaderboard(1,lb_name,points,()=>{window.prev_score = points;});
+        set_leaderboard(ya_flag,lb_name,points,()=>{window.prev_score = points;},1);
     }
 
     document.getElementById("points").innerHTML=setText("Счет: ","Count: ")+points;
     document.getElementById("points").innerHTML+="   <b style=\"color:green\">+"+points_earned+"</b>";
 
-    console.log(document.getElementById("points"));
+
 
     displayProblem();
 }
@@ -90,6 +148,7 @@ function displayIncorrect(id) {
 }
 
 function displayProblem() {
+    console.log("Setting problem");
     problem = getRandomProblem();
     document.getElementById("problem_setting").innerHTML=problem.problem;
 
@@ -125,9 +184,10 @@ function displayProblem() {
     setTimer();
 }
 
-function load(lb_name) {
-    get_leaderboard(1, lb_name,()=>{});
-    init_with_lang(1,loadFunction);
+function load() {
+    document.body.addEventListener("resize",() => {return false;});
+    get_leaderboard(ya_flag, lb_name, 0);
+    init_with_lang(ya_flag,loadFunction);
 
 }
 
