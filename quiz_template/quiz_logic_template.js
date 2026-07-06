@@ -1,20 +1,29 @@
-document.body.addEventListener("load",load);
-document.body.addEventListener("resize",() => {return false;});
+var lb_name="";
+var lb_label_ru="";
+var lb_label_en="";
+var ya_flag=1;
 
-let points = 0;
-let lives = 3;
+window.prev_score=0;
 
-function lose(lb_name) {
+document.addEventListener("DOMContentLoaded",load);
+window.addEventListener("resize",() => {return false;});
 
-    set_leaderboard(1,lb_name,Math.max(points,window.prev_score),ysdk.features.GameplayAPI?.stop);
+points = 0;
+lives = 3;
+
+function lose() {
+    var value = Math.max(points,window.prev_score);
+
+    set_leaderboard(ya_flag,lb_name,value,()=>{},1);
     document.getElementById("lives").textContent=setText("Вы проиграли. Начать новую игру?", "You lost. Play again?");
 
     var btn2 = document.createElement("button");
     btn2.className = btn2.className + "button";
 
     btn2.textContent=setText("Ага","Ok");
-    btn2.onclick = function() {document.getElementById(d.id).style.display = "none";
-        show_ads(1, () => {document.body.removeChild(document.getElementById("leaderboard"));
+    btn2.onclick = function() {
+        document.getElementById("game").removeChild(document.getElementById("problem"))
+        show_ads(ya_flag, () => {document.body.removeChild(document.getElementById("leaderboard"));
             loadFunction();})
 
     };
@@ -40,13 +49,12 @@ function setTimer(){
     }, 10);
 }
 
-function newGame(lb_name) {
-    console.log("New game");
+function newGame() {
     lives = 3;
     points = 0;
     document.getElementById("points").textContent=setText("Счет: ","Count: ")+points;
     document.getElementById("lives").textContent=setText("Осталось жизней: ","Lives left: ")+String.fromCodePoint(10084).repeat(lives);
-    get_leaderboard(1, lb_name, ysdk.features.GameplayAPI?.start);
+    get_leaderboard(ya_flag, lb_name, 1);
 
     displayProblem();
 }
@@ -56,7 +64,7 @@ function getRandomProblem() {
     return {"problem":problem,"correct_answer":correct_answer,"other_answer":other_answer}
 }
 
-function displayCorrect(id, lb_name) {
+function displayCorrect(id) {
     clearInterval(window.timer);
     document.getElementById("right_button").removeAttribute("class");
     document.getElementById("left_button").removeAttribute("class");
@@ -64,14 +72,11 @@ function displayCorrect(id, lb_name) {
     points +=points_earned;
     if (points > window.prev_score)
     {
-        set_leaderboard(1,lb_name,points,()=>{window.prev_score = points;});
+        set_leaderboard(ya_flag,lb_name,points,()=>{window.prev_score = points;},1);
     }
 
     document.getElementById("points").innerHTML=setText("Счет: ","Count: ")+points;
     document.getElementById("points").innerHTML+="   <b style=\"color:green\">+"+points_earned+"</b>";
-
-    console.log(document.getElementById("points"));
-
     displayProblem();
 }
 
@@ -125,9 +130,10 @@ function displayProblem() {
     setTimer();
 }
 
-function load(lb_name) {
-    get_leaderboard(1, lb_name,()=>{});
-    init_with_lang(1,loadFunction);
+function load() {
+    document.body.addEventListener("resize",() => {return false;});
+    get_leaderboard(ya_flag, lb_name, 0);
+    init_with_lang(ya_flag,loadFunction);
 
 }
 

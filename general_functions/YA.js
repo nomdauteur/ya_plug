@@ -63,34 +63,36 @@ function show_ads(ya_flag, foo) {
     }
 }
 
-function set_leaderboard(ya_flag, lb_name, value, foo_after) {
+function set_leaderboard(ya_flag, lb_name, value, foo_after, stop_flag) {
     if (ya_flag==0) return;
 
     YaGames.init()
         .then((ysdk) => {
-            ysdk.getLeaderboards()
-                .then(lb => {
-                    console.log("Will now set with "+value);
+            ysdk.leaderboards.setScore(lb_name, value);
 
-                    lb.setLeaderboardScore(lb_name, value);
-                });
+            if (stop_flag==1) {
+                ysdk.features.GameplayAPI?.stop();
+            }
 
             foo_after();
-        });
+        }).catch(console.error);;
 }
 
-function get_leaderboard(ya_flag, lb_name, foo_after) {
+function get_leaderboard(ya_flag, lb_name, start_flag) {
     if (ya_flag==0) return;
 
     YaGames.init()
 
         .then((ysdk) => {
 
-            ysdk.getLeaderboards()
-                .then(lb => {
-                    // С использованием всех значений по умолчанию.
-                    lb.getLeaderboardEntries(lb_name, { quantityTop: 3, includeUser: true, quantityAround: 3 })
-                        .then(res => {console.log(res); window.leaderboard=res; foo_after();});
+            ysdk.leaderboards.getEntries(lb_name, { quantityTop: 3, includeUser: true, quantityAround: 3 })
+                        .then(res => {window.leaderboard=res; if (start_flag==1) {ysdk.features.GameplayAPI?.start;} drawLeaderboard(lb_name,lb_label_ru,lb_label_en)});
+            ysdk.leaderboards.getPlayerEntry(lb_name)
+                .then(res => {
+                    window.prev_score=res.score;})
+                .catch(err => {
+                    if (err.code === 'LEADERBOARD_PLAYER_NOT_PRESENT') {
+                        window.prev_score=0;}
                 });
         });
 }
