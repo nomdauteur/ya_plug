@@ -1,0 +1,22 @@
+.everything {
+    display: flex;
+    width: 100vw;
+    height: 98vh;
+
+}
+
+div {
+    box-sizing: border-box;
+    display: flex;
+    font-size: 7vmin;
+    text-align: center;
+    justify-content: center;
+    position: fixed;
+    width: 3.5vmin;
+    height: 3.5vmin;
+}
+
+.cell{
+    border:solid;
+    border-radius: 2vmin;
+}

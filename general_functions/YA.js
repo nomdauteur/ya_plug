@@ -1,4 +1,4 @@
-function init_with_lang(ya_flag, foo) {
+function init_with_lang(ya_flag, foo, foo_before=()=>{}) {
     if (ya_flag===0) {
         foo();
         return;
@@ -7,6 +7,7 @@ function init_with_lang(ya_flag, foo) {
         YaGames.init()
             .then((ysdk) => {
                 document.getElementById("lang").textContent=ysdk.environment.i18n.lang;
+                foo_before();
                 ysdk.features.LoadingAPI?.ready();
 
                 while (document.getElementById("lang").textContent == "Language") {
