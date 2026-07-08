@@ -10,7 +10,7 @@ lb_name="fractal2048";
 
 MAX_DEGREE=15;
 
-SKIN='mandelbrot';
+SKIN='Mandelbrot';
 
 
 class Field {
@@ -231,8 +231,6 @@ class Field {
         let theField=this;
         window.requestAnimationFrame(function(){theField.draw()});
 
-        var a = new Date();
-
     }
 
     gameover() {
@@ -245,8 +243,8 @@ class Field {
             for (var j = 0; j < this.width; j++) {
 
                 this.field[i][j].value=0;
-                this.draw();
                 //sleep(250);
+                this.draw();
             }
     }
 }

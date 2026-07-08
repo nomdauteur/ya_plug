@@ -1,7 +1,7 @@
 .everything {
     display: flex;
     width: 100vw;
-    height: 80vh;
+    height: 70vmin;
 
 }
 
@@ -29,9 +29,9 @@
     width: fit-content;
     text-overflow:ellipsis;
     height:fit-content;
-    padding-left:5vmin;
-    padding-right:5vmin;
-    margin-right: 5vmin;
+    padding-left:1vmin;
+    padding-right:1vmin;
+    margin-right: 2vmin;
     font-size: 2vmin;
     flex:1;
     background-color:white;
