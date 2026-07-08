@@ -11,6 +11,7 @@
 
     <!--Path from the root, not from template folder, BC gets mover anyway-->
     <link href="general_functions/general_style_helper.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
     <script src="general_functions/data_tools.js"></script>
     <script src="general_functions/interface_helpers.js"></script>
     <script src="general_functions/math_handlers.js"></script>
@@ -25,18 +26,18 @@
 </head>
 <body style="background: radial-gradient(ellipse at 68% 73%, #bd5f8c, #3b716b);">
 
-<div style="position:fixed;" id = "upper">
-    <div style="display:flex">
-        <div class="tab" id="mandelbrot"  onclick="activateMandelbrot()"></div>
-        <div class="tab" id="burning"  style="background-color:white;" onclick="activateBurning()"></div>
-        <div class="tab" id="inverse" style="background-color:white;" onclick="activateInverse()"></div>
+    <div class="tabs">
+        <div class="tab" id="mandelbrot" style="border:0.5vmin solid #323232" onclick="activateMandelbrot()"></div>
+        <div class="tab" id="burning"  onclick="activateBurning()"></div>
+        <div class="tab" id="inverse" onclick="activateInverse()"></div>
     </div>
 
-
-        <div id="game" style=" width:98vw; overflow: hidden; word-wrap: break-word;white-space:pre-wrap;" class="everything" ></div>
-<p id="score" style="bottom:0vmin; margin-bottom: 2vh; left:65vw; width:auto; position:fixed;color: #660000; font-size:5vmin;">Счет:</p>
-<button id="newGame" style="bottom:0vmin; left:85vw; margin-bottom: 2vh; position:fixed;color: #660000; border-radius:0.5vmin; border-width:0.5vmin; height:3vmin; font-size:5vmin; padding-top:0px;padding-bottom:0px;padding-left:0px;padding-right:0px;width:auto;" onclick="newGame()">New game</button>
-<p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">Language</p>
+        <div id="game" style="width:98vw; overflow: hidden; word-wrap: break-word;white-space:pre-wrap;" class="everything" ></div>
+    <div class="low">
+        <p class="lows" id="score">Счет:</p>
+        <p class="lows" id="newGame" style="text-align:center;" onclick="newGame()">New game</p>
+    </div>
+    <p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">Language</p>
 </body>
 
 </html>

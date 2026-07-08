@@ -1,12 +1,12 @@
 class Tile {
 
 
-    constructor(value,x,y) { //type as num, cell as e4
+    constructor(value,x,y,width,height) { //type as num, cell as e4
         this.value=value;
         this.cell={"x":x,"y":y};
         this.visited=0;
-        this.width=5;
-        this.height=5;
+        this.width=width;
+        this.height=height;
     }
 
 

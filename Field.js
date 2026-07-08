@@ -5,7 +5,7 @@ var SIDE;
 
 var lastAdShown;
 
-ya_flag=0;
+ya_flag=1;
 lb_name="fractal2048";
 
 MAX_DEGREE=15;
@@ -37,22 +37,23 @@ class Field {
 
 
     init_field() {
-
         for (var i = 0; i < this.height; i++)
             for (var j = 0; j < this.width; j++)
-                this.field[i][j]=new Figure(0,j,i);
+                this.field[i][j]=new Tile(0,j,i, this.width,this.height);
         this.score=0;
         document.getElementById("score").textContent=setText("Счет: ","Score: ")+this.score;
-        LEFT_OFFSET=vw(10);
-        TOP_OFFSET=vh(10);
+
         SIDE=vmin(15);
+
+        LEFT_OFFSET=(vw(100)-4.5*SIDE)/2;
+        TOP_OFFSET=vh(10);
 
 
         var init_y = randomInt(this.height-1);
         var init_x = randomInt(this.width-1);
         var fig = randomInt(1)+1;
 
-        this.field[init_y][init_x]=new Figure(fig,init_x,init_y);
+        this.field[init_y][init_x]=new Tile(fig,init_x,init_y, this.width,this.height);
 
         for (var i = 0; i <this.height; i++) {
             for (var j=0; j < this.width; j++) {
@@ -73,7 +74,7 @@ class Field {
             }
         }
 
-        document.getElementById("newGame").style.bottom="15vh";
+        /*document.getElementById("newGame").style.bottom="15vh";
         document.getElementById("score").style.bottom="15vh";
 
         if (window.innerHeight>=window.innerWidth)
@@ -81,25 +82,34 @@ class Field {
             document.getElementById("newGame").style.left="85vw";
             document.getElementById("score").style.left="65vw";
             document.getElementById("newGame").style.bottom="5vh";
-        }
+        }*/
         this.isPlaying=true;
 
         start(ya_flag);
         this.draw();
     }
 
+    canMove(y,x,eventKey) {
+        if (!this.field[y][x].existsNextCell(eventKey)) return false;
+        var incr_x=(eventKey=="ArrowLeft"?-1:(eventKey=="ArrowRight"?1:0));
+        var incr_y=(eventKey=="ArrowDown"?1:(eventKey=="ArrowUp"?-1:0));
+        var value = this.field[y][x].value;
+
+        return ((this.field[y+incr_y][x+incr_x].value==0) || (this.field[y+incr_y][x+incr_x].value==value));
+
+    }
+
     getNextPlace(y,x,eventKey) {
-        var ret={"x":-1,"y":-1};
-        var name = this.field[y][x].type.name;
+        var value = this.field[y][x].value;
         if (!this.field[y][x].existsNextCell(eventKey)) return {"x":x,"y":y};
         else {
             var incr_x=(eventKey=="ArrowLeft"?-1:(eventKey=="ArrowRight"?1:0));
             var incr_y=(eventKey=="ArrowDown"?1:(eventKey=="ArrowUp"?-1:0));
 
-            while ((this.field[y][x].existsNextCell(eventKey)) && ((this.field[y+incr_y][x+incr_x].type.name=="absence") || this.field[y+incr_y][x+incr_x].type.name==name) ) {
-                if (this.field[y][x].type.name==name && name==TYPES[Object.keys(TYPES).length-1].name) break;
+            while (this.canMove(y,x,eventKey)) {
+                if (this.field[y][x].value==value && value==MAX_DEGREE) break;
                 x+=incr_x; y+=incr_y;
-                if (this.field[y][x].type.name==name) break;
+                if (this.field[y][x].value==value) break;
             }
 
             return {"x":x,"y":y};
@@ -107,10 +117,10 @@ class Field {
     }
 
     ismovable(i,j) {
-        if (this.field[i][j].existsNextCell("ArrowRight") && (this.field[i][j+1].value==0 || this.field[i][j+1].value==this.field[i][j].value)) return true;
-        if (this.field[i][j].existsNextCell("ArrowLeft") && (this.field[i][j-1].value==0 || this.field[i][j-1].value==this.field[i][j].value)) return true;
-        if (this.field[i][j].existsNextCell("ArrowUp") && (this.field[i-1][j].value==0 || this.field[i-1][j].value==this.field[i][j].value)) return true;
-        if (this.field[i][j].existsNextCell("ArrowDown") && (this.field[i+1][j].value==0 || this.field[i+1][j].value==this.field[i][j].value)) return true;
+        if (this.canMove(i,j,"ArrowRight")) return true;
+        if (this.canMove(i,j,"ArrowLeft")) return true;
+        if (this.canMove(i,j,"ArrowUp")) return true;
+        if (this.canMove(i,j,"ArrowDown")) return true;
 
         return false;
     }
@@ -134,11 +144,11 @@ class Field {
             do {
                 if ((this.field[_i][_j].value!=0) && (this.field[_i][_j].visited!=1) ) {
                     var pos = this.getNextPlace(_i,_j,eventKey);
-                    if ((this.field[pos.y][pos.x].value!=0)|| (_i==pos.y && _j==pos.x)) {
+                    if ((this.field[pos.y][pos.x].value==0)|| (_i==pos.y && _j==pos.x)) {
                         this.field[pos.y][pos.x].value=this.field[_i][_j].value;
                         this.field[pos.y][pos.x].visited=1;
                         if (_i!=pos.y || _j!=pos.x) {
-                            this.field[_i][_j]=new Figure(0,_j,_i);
+                            this.field[_i][_j]=new Tile(0,_j,_i,this.width,this.height);
 
                         }
                     }
@@ -151,7 +161,7 @@ class Field {
                         document.getElementById("score").textContent=setText("Счет: ","Score: ")+this.score;
                         this.field[pos.y][pos.x].value=Math.min(this.field[_i][_j].value+1,MAX_DEGREE);
                         this.field[pos.y][pos.x].visited=1;
-                        if (_i!=pos.y || _j!=pos.x) this.field[_i][_j]=new Figure(0,_j,_i);
+                        if (_i!=pos.y || _j!=pos.x) this.field[_i][_j]=new Tile(0,_j,_i,this.width,this.height);
 
                     }
 
@@ -198,7 +208,7 @@ class Field {
 
             var fig = randomInt(1)+1;
 
-            this.field[init_y][init_x]=new Figure(fig,init_x,init_y);
+            this.field[init_y][init_x]=new Tile(fig,init_x,init_y,this.width,this.height);
 
         }
 
@@ -209,7 +219,12 @@ class Field {
 
         for (var i = 0; i < this.height; i++)
             for (var j = 0; j < this.width; j++) {
-                document.getElementById("cell_"+i+"_"+j).style.backgroundImage="url(images/"+SKIN+'_'+(this.field[i][j].value+1)+".jpg)";
+                if (this.field[i][j].value==0) {
+                    document.getElementById("cell_"+i+"_"+j).style.backgroundImage="url(images/0.jpg)";
+                }
+                else {
+                    document.getElementById("cell_"+i+"_"+j).style.backgroundImage="url(images/"+SKIN+'_'+(this.field[i][j].value+1)+".jpg)";
+                }
                 document.getElementById("cell_"+i+"_"+j).style.backgroundSize="cover";
 
             }
@@ -221,16 +236,6 @@ class Field {
     }
 
     gameover() {
-        var d=document.createElement("div");
-        d.id="banner";
-        d.textContent=setText("Вы проиграли","You lost");
-        d.style.position="fixed";
-        d.style.top="40vmin";
-        d.style.left="10vw";
-        d.style.width="auto";
-        d.style.fontSize="5vmin";
-        d.style.textAlign="center";
-        document.body.appendChild(d);
 
         set_leaderboard(ya_flag, lb_name, Math.min(Math.max(this.score,window.prev_score), ()=>{}), 1);
 
@@ -239,8 +244,9 @@ class Field {
         for (var i = 0; i < this.height; i++)
             for (var j = 0; j < this.width; j++) {
 
-                document.getElementById("cell_"+i+"_"+j).textContent="";
-                sleep(250);
+                this.field[i][j].value=0;
+                this.draw();
+                //sleep(250);
             }
     }
 }
@@ -249,9 +255,10 @@ class Field {
 function resize() {
     var elements = document.getElementsByClassName("cell");
 
-    LEFT_OFFSET=vw(10);
-    TOP_OFFSET=vh(10);
     SIDE=vmin(15);
+    LEFT_OFFSET=(vw(100)-4.5*SIDE)/2;
+    TOP_OFFSET=vh(10);
+
     for (i = 0; i < elements.length;i++) {
         var coord=elements[i].id.substring(5).split("_");
         elements[i].style.left=(LEFT_OFFSET+coord[1]*SIDE)+"px";
@@ -264,7 +271,7 @@ function resize() {
     }
 
 
-    if (window.innerWidth>window.innerHeight) {
+    /*if (window.innerWidth>window.innerHeight) {
         document.getElementById("score").style.left="65vw";
         document.getElementById("newGame").style.left="85vw";
 
@@ -280,7 +287,7 @@ function resize() {
 
     }
     document.getElementById("newGame").style.bottom="15vh";
-    document.getElementById("score").style.bottom="15vh";
+    document.getElementById("score").style.bottom="15vh";*/
 
 
 }

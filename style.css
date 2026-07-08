@@ -1,11 +1,12 @@
 .everything {
     display: flex;
     width: 100vw;
-    height: 98vh;
+    height: 80vh;
 
 }
 
-div {
+
+.cell{
     box-sizing: border-box;
     display: flex;
     font-size: 7vmin;
@@ -14,9 +15,56 @@ div {
     position: fixed;
     width: 3.5vmin;
     height: 3.5vmin;
-}
-
-.cell{
     border:solid;
     border-radius: 2vmin;
+}
+
+.tab {
+    text-align: center;
+    border-radius: 3vmin;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    width: fit-content;
+    text-overflow:ellipsis;
+    height:fit-content;
+    padding-left:5vmin;
+    padding-right:5vmin;
+    margin-right: 5vmin;
+    font-size: 2vmin;
+    flex:1;
+    background-color:white;
+}
+
+.tabs{
+    display:flex;
+    border-bottom:2px solid #ccc;
+    padding:1vmin;
+    gap: 2vmin;
+}
+
+.low{
+    display:flex;
+    border-top:2px solid #ccc;
+    padding:1vmin;
+    gap: 20vmin;
+}
+
+.lows {
+    text-align: center;
+    border-radius: 1vmin;
+    white-space: nowrap;
+    overflow: hidden;
+    width: fit-content;
+    text-overflow:ellipsis;
+    height:100%;
+    padding-left:5vmin;
+    padding-right:5vmin;
+    margin-right: 5vmin;
+    margin-bottom:0;
+    padding-bottom:0;
+    font-size: 3vmin;
+    flex:1;
+    background-color:white;
 }
