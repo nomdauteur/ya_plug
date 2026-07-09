@@ -6,12 +6,12 @@ function getMousePos(canvas, evt) {
     };
 }
 
-function updateMouse(e) {
+function updateMouse(canvas,e) {
     let mousePos = getMousePos(canvas, e);
     return mousePos;
 }
 
 function touchMoveMouse(e) {
-    let mousePos = {"x":evt.touches[0].clientX,"y":evt.touches[0].clientY};
+    let mousePos = {"x":e.touches[0].clientX,"y":e.touches[0].clientY};
     return mousePos;
 }

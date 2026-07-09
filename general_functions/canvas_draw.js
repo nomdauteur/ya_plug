@@ -8,6 +8,8 @@ function drawRoundRectangle(ctx,x,y,width,height,rad) {
     ctx.fill();
 }
 
+
+
 function drawCircle(ctx, x, y, radius, fill) {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI);

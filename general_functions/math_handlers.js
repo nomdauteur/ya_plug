@@ -60,3 +60,8 @@ function lineInCircle(start_point_x, start_point_y, end_point_x, end_point_y, ci
 function incrementAngle(angle,delta) {
     return (angle+delta+2*Math.PI)%(2*Math.PI);
 }
+
+function pointsDistance(a, b) {
+    var AB = {"x":b.x-a.x,"y":b.y-a.y};
+    return Math.sqrt(AB.x*AB.x+AB.y*AB.y);
+}
