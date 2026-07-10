@@ -11,6 +11,8 @@ var RATIO_DOWN=16;
 
 var isGameOn;
 
+var v;
+
 
 
 function resize() {
@@ -26,15 +28,15 @@ function resize() {
         h = window.innerWidth * RATIO_DOWN/RATIO_UP;
     }
     console.log(""+w+", "+h);
-    WIDTH=Math.floor(w);
-    HEIGHT=Math.floor(h * RATIO_UP/RATIO_DOWN);
+    WIDTH=Math.floor(w) * 10;
+    HEIGHT=Math.floor(h * RATIO_UP/RATIO_DOWN) * 10;
 
     ctx = document.getElementById('canvas').getContext('2d');
     ctx.font="bold 5vmin Arial";
     document.getElementById('upper').style.top = 0 +"px";
     document.getElementById('upper').style.left = (window.innerWidth-w)/2 +"px";
     document.getElementById('upper').style.width = w +"px";
-    document.getElementById('upper').style.height = h * (RATIO_UP/3)/RATIO_DOWN +"px";
+    document.getElementById('upper').style.height = w * (RATIO_UP/3)/RATIO_DOWN +"px";
 
 
     document.getElementById('canvas').style.width = w +"px";
@@ -51,8 +53,8 @@ function resize() {
     console.log(""+WIDTH+", "+HEIGHT);
 
 
-    if (ctx!=null && ctx != undefined) {
-        //RESIZE CANVAS LOGIC
+    if (v!=null && v != undefined) {
+        v.draw();
     }
 }
 
@@ -60,6 +62,6 @@ document.addEventListener("DOMContentLoaded",load);
 
 function load() {
     resize();
-    var v = new Voronoi(20, WIDTH, HEIGHT);
+    v = new Voronoi(10, WIDTH, HEIGHT);
     v.draw(ctx);
 }

@@ -48,7 +48,7 @@ class Voronoi {
             }
         }
         for (var p = 0; p < this.points_no; p++) {
-            drawCircle(ctx, this.points[p].x,this.points[p].y, 3, this.pt_colors[p]);
+            drawCircle(ctx, this.points[p].x,this.points[p].y, 10, this.pt_colors[p]);
         }
     }
 
