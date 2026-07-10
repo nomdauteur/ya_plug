@@ -12,6 +12,11 @@ var RATIO_DOWN=16;
 var isGameOn;
 
 var v;
+window.mousePos={x:0,y:0};
+
+
+
+window.addEventListener('mousemove', updateMouse, false);
 
 
 
@@ -36,7 +41,7 @@ function resize() {
     document.getElementById('upper').style.top = 0 +"px";
     document.getElementById('upper').style.left = (window.innerWidth-w)/2 +"px";
     document.getElementById('upper').style.width = w +"px";
-    document.getElementById('upper').style.height = w * (RATIO_UP/3)/RATIO_DOWN +"px";
+    document.getElementById('upper').style.height = h * (RATIO_UP/3)/RATIO_DOWN +"px";
 
 
     document.getElementById('canvas').style.width = w +"px";
@@ -60,8 +65,16 @@ function resize() {
 
 document.addEventListener("DOMContentLoaded",load);
 
+
 function load() {
+    document.getElementById('canvas').addEventListener("click",canvasClicked);
     resize();
     v = new Voronoi(10, WIDTH, HEIGHT);
+    v.draw(ctx);
+}
+
+function canvasClicked() {
+    console.log("Mouse click inside canvas on "+window.mousePos.x+" "+window.mousePos.y);
+    v.click(window.mousePos);
     v.draw(ctx);
 }

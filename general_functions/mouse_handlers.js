@@ -1,3 +1,5 @@
+
+
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -6,8 +8,9 @@ function getMousePos(canvas, evt) {
     };
 }
 
-function updateMouse(canvas,e) {
-    let mousePos = getMousePos(canvas, e);
+function updateMouse(e) {
+    canvas = document.getElementById('canvas');
+    window.mousePos = getMousePos(canvas, e);
     return mousePos;
 }
 

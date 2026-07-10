@@ -24,15 +24,15 @@
     <script src="game_voronoi.js"></script>
 
 </head>
-<body id = "body" style="background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);" onresize="resize()">
-<div style="position:fixed;" id = "upper">
+<body id = "body" onresize="resize()">
+<div style="position:fixed; background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);"  id = "upper">
     <p id="level"></p>
     <p id="goal"></p>
     <p id="hint" style="font-size:1vw"></p>
 </div>
 <canvas style="position:fixed;" id="canvas">
 </canvas>
-<div style="position:fixed;" id = "lower">
+<div style="position:fixed; background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);"  id = "lower">
     <p style="margin-right:0.5vw;display:flex"><button id="retry" onclick = "retry()"></button>
         <button id="check" onclick = "check()"></button>
         <button id="next" onclick = "next()"></button></p>
