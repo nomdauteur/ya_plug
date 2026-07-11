@@ -71,10 +71,16 @@ function load() {
     resize();
     v = new Voronoi(10, WIDTH, HEIGHT);
     v.draw(ctx);
+    window.requestAnimationFrame(update);
 }
 
 function canvasClicked() {
     console.log("Mouse click inside canvas on "+window.mousePos.x+" "+window.mousePos.y);
     v.click(window.mousePos);
     v.draw(ctx);
+}
+
+function update() {
+    v.update(ctx);
+    window.requestAnimationFrame(update);
 }

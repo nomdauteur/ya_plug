@@ -37,8 +37,8 @@ function pointLineDistanceSquared(start_point_x, start_point_y, end_point_x, end
 
 function pointLineProj(start_point_x, start_point_y, end_point_x, end_point_y, point_x, point_y) {
     var lambda = ((end_point_x-start_point_x) *(point_x-start_point_x) + (end_point_y-start_point_y) *(point_y-start_point_y)) / ((end_point_x-start_point_x)*(end_point_x-start_point_x)+(end_point_y-start_point_y)*(end_point_y-start_point_y));
-    return {"x":start_point_x+lambda*(end_point_x-start_point_x),
-        "y":start_point_y+lambda*(end_point_y-start_point_y)};
+    return {x:start_point_x+lambda*(end_point_x-start_point_x),
+        y:start_point_y+lambda*(end_point_y-start_point_y)};
 }
 
 function lineInCircle(start_point_x, start_point_y, end_point_x, end_point_y, circle_x, circle_y, circle_rad) {
@@ -62,6 +62,6 @@ function incrementAngle(angle,delta) {
 }
 
 function pointsDistance(a, b) {
-    var AB = {"x":b.x-a.x,"y":b.y-a.y};
+    var AB = {x:b.x-a.x,y:b.y-a.y};
     return Math.sqrt(AB.x*AB.x+AB.y*AB.y);
 }

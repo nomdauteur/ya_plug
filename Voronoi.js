@@ -1,5 +1,7 @@
+EPSILON = 0.01;
+
 function point(x,y) {
-    return {"x":x,"y":y};
+    return {x:x,y:y};
 }
 
 function colorString(r,g,b,a=255) {
@@ -21,13 +23,16 @@ class Voronoi {
         this.points = [];
         this.colors=[];
         this.maxClicked=-1;
+        this.speeds=[];
+        this.timeBorn=Date.now();
+        this.timeLastUpdate=Date.now();
         for (var i = 0; i < points_no; i++) {
             var r = (40+randomInt(160));
             var g = (40+randomInt(160));
             var b = (40+randomInt(160));
             this.colors.push({r:r,g:g,b:b, a:255});
-            this.points.push({"x":randomInt(canvas_width),"y":randomInt(canvas_height)});
-
+            this.points.push({x:randomInt(canvas_width),y:randomInt(canvas_height)});
+            this.speeds.push({x:-10+Math.random()*20,y:-10+Math.random()*20});
         }
         this.matrix= Array.from({ length: canvas_height }, () => Array(canvas_width).fill(0));
     }
@@ -78,6 +83,8 @@ class Voronoi {
             ctx.fillStyle = this.pt_color(p);
             ctx.fillText(""+p,this.points[p].x,this.points[p].y);
         }
+
+
     }
 
     clickedOn(mousePos) {
@@ -96,6 +103,41 @@ class Voronoi {
             console.log("Wrong click");
         }
 
+    }
+
+    changeBallPos(index, delta) {
+        var nextPoint = {x: this.points[index].x + delta * this.speeds[index].x,
+            y: this.points[index].y + delta * this.speeds[index].y};
+        if (nextPoint.x < EPSILON) {
+            this.speeds[index].x = -this.speeds[index].x;
+            nextPoint.x = EPSILON;
+        }
+        if (nextPoint.x > this.canvas_width+EPSILON) {
+            this.speeds[index].x = -this.speeds[index].x;
+            nextPoint.x = this.canvas_width+EPSILON;
+        }
+        if (nextPoint.y < EPSILON) {
+            this.speeds[index].y = -this.speeds[index].y;
+            nextPoint.y = EPSILON;
+        }
+        if (nextPoint.y > this.canvas_height+EPSILON) {
+            this.speeds[index].y = -this.speeds[index].y;
+            nextPoint.y = this.canvas_height+EPSILON;
+        }
+        this.points[index] = nextPoint;
+
+    }
+
+    update(ctx) {
+        var currTime = Date.now();
+        var delta = (currTime-this.timeLastUpdate)/1000;
+
+        for (var p = 0; p < this.points_no; p++) {
+            this.changeBallPos(p, delta);
+        }
+
+        this.timeLastUpdate=currTime;
+        this.draw(ctx);
     }
 
 

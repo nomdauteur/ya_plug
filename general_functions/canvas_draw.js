@@ -39,8 +39,7 @@ function redrawByPixels(ctx,canvas_width, canvas_height,matrix, colors) { // mat
         }
     }
 
-    console.log(imageData);
 
     ctx.putImageData(imageData, 0, 0);
-    console.log(ctx.getImageData(0, 0, canvas_width, canvas_height));
+
 }
