@@ -2,8 +2,8 @@ var field;
 var c;
 var ctx;
 
-var WIDTH=0;
-var HEIGHT=0;
+var WIDTH=300;
+var HEIGHT=300;
 
 var RATIO_UP=9;
 var RATIO_DOWN=16;
@@ -33,10 +33,10 @@ function resize() {
         h = window.innerWidth * RATIO_DOWN/RATIO_UP;
     }
     console.log(""+w+", "+h);
-    WIDTH=Math.floor(w) * 10;
-    HEIGHT=Math.floor(h * RATIO_UP/RATIO_DOWN) * 10;
+    //WIDTH=Math.floor(w) * 10;
+    //HEIGHT=Math.floor(h * RATIO_UP/RATIO_DOWN) * 10;
 
-    ctx = document.getElementById('canvas').getContext('2d');
+    ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
     ctx.font="bold 5vmin Arial";
     document.getElementById('upper').style.top = 0 +"px";
     document.getElementById('upper').style.left = (window.innerWidth-w)/2 +"px";

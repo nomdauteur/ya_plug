@@ -2,8 +2,12 @@ function point(x,y) {
     return {"x":x,"y":y};
 }
 
-function colorString(r,g,b,a=1) {
+function colorString(r,g,b,a=255) {
     return `rgba(${r},${g},${b},${a})`;
+}
+
+function color(r,g,b,a=255) {
+    return {r:r,g:g,b:b,a:a};
 }
 
 
@@ -16,14 +20,14 @@ class Voronoi {
         this.points_no=points_no;
         this.points = [];
         this.colors=[];
-        this.wasClicked=[];
+        this.maxClicked=-1;
         for (var i = 0; i < points_no; i++) {
             var r = (40+randomInt(160));
             var g = (40+randomInt(160));
             var b = (40+randomInt(160));
-            this.colors.push({r:r,g:g,b:b});
+            this.colors.push({r:r,g:g,b:b, a:255});
             this.points.push({"x":randomInt(canvas_width),"y":randomInt(canvas_height)});
-            this.wasClicked.push(0);
+
         }
         this.matrix= Array.from({ length: canvas_height }, () => Array(canvas_width).fill(0));
     }
@@ -33,11 +37,11 @@ class Voronoi {
     }
 
     pt_color(index) {
-        return colorString(this.colors[index].r-20,this.colors[index].g-20,this.colors[index].b-20);
+        return colorString(this.colors[index].r-40,this.colors[index].g-40,this.colors[index].b-40);
     }
 
     clicked_color(index) {
-        return colorString(this.colors[index].r+40,this.colors[index].g+40,this.colors[index].b+40, 0.5);
+        return color(this.colors[index].r+40,this.colors[index].g+40,this.colors[index].b+40, 255);
     }
 
     compute_matrix() { // for now static
@@ -60,20 +64,19 @@ class Voronoi {
         ctx.clearRect(0, 0, this.canvas_width, this.canvas_height);
         ctx.fillStyle = "rgba(255,255,255,255)";
         ctx.fillRect(0, 0, this.canvas_width, this.canvas_height);
-        for (var i = 0; i < this.canvas_height; i++) {
-            for (var j = 0; j < this.canvas_width; j++) {
-                if (this.wasClicked[this.matrix[i][j]]==0) {
-                    ctx.fillStyle = this.colorString(this.matrix[i][j]);
-
-                }
-                else {
-                    ctx.fillStyle = this.clicked_color(this.matrix[i][j]);
-                }
-                ctx.fillRect(j, i, 1, 1);
-            }
-        }
+        var colors = [];
         for (var p = 0; p < this.points_no; p++) {
-            drawCircle(ctx, this.points[p].x,this.points[p].y, 10, this.pt_color(p));
+            if (p <= this.maxClicked) colors.push(this.clicked_color(p));
+            else colors.push(this.colors[p]);
+        }
+
+        redrawByPixels(ctx,this.canvas_width, this.canvas_height,this.matrix, colors);
+
+        ctx.font="7vmin Arial";
+        for (var p = 0; p < this.points_no; p++) {
+            //drawCircle(ctx, this.points[p].x,this.points[p].y, 10, this.pt_color(p));
+            ctx.fillStyle = this.pt_color(p);
+            ctx.fillText(""+p,this.points[p].x,this.points[p].y);
         }
     }
 
@@ -86,7 +89,12 @@ class Voronoi {
     click(mousePos) {
         var index = this.clickedOn(mousePos);
         console.log("Clicked on " + index);
-        this.wasClicked[index]=1;
+        if (this.maxClicked+1==index) {
+            this.maxClicked=index;
+        }
+        else {
+            console.log("Wrong click");
+        }
 
     }
 
