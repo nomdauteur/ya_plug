@@ -1,18 +1,21 @@
 EPSILON = 5;
+RADIUS=10;
 
 function point(x,y) {
     return {x:x,y:y};
 }
 
-function colorString(r,g,b,a=255) {
-    return `rgba(${r},${g},${b},${a})`;
+function colorString(color) {
+    return `rgba(${color.r},${color.g},${color.b},${color.a})`;
 }
 
 function color(r,g,b,a=255) {
     return {r:r,g:g,b:b,a:a};
 }
 
-
+function antiColor(color) {
+    return {r:255-color.r,g:255-color.g,b:255-color.b,a:color.a};
+}
 
 
 class Voronoi {
@@ -38,11 +41,11 @@ class Voronoi {
     }
 
     colorString(index) {
-        return colorString(this.colors[index].r,this.colors[index].g,this.colors[index].b);
+        return colorString(color(this.colors[index].r,this.colors[index].g,this.colors[index].b));
     }
 
     pt_color(index) {
-        return colorString(this.colors[index].r-50,this.colors[index].g-50,this.colors[index].b-50);
+        return color(this.colors[index].r-50,this.colors[index].g-50,this.colors[index].b-50);
     }
 
     clicked_color(index) {
@@ -77,13 +80,13 @@ class Voronoi {
 
         redrawByPixels(ctx,this.canvas_width, this.canvas_height,this.matrix, colors);
 
-        ctx.font="10vmin Arial";
+        ctx.font="9vmin Arial";
         for (var p = 0; p < this.points_no; p++) {
 
 
-            drawCircle(ctx, this.points[p].x,this.points[p].y, 10, this.pt_color(p));
-            ctx.fillStyle = "black";
-            ctx.fillText(""+p,this.points[p].x,this.points[p].y);
+            drawCircle(ctx, this.points[p].x,this.points[p].y, RADIUS, colorString(this.pt_color(p)));
+            ctx.fillStyle = colorString(antiColor(this.pt_color(p)));
+            ctx.fillText(""+p,this.points[p].x-(RADIUS/2),this.points[p].y+(RADIUS/2));
         }
 
 
@@ -98,7 +101,7 @@ class Voronoi {
     clickedInto(mousePos) {
         var results=[];
         for (var p = 0; p < this.points_no; p++) {
-            if (pointsDistance(this.points[p],mousePos)<EPSILON) {
+            if (pointsDistance(this.points[p],mousePos)<RADIUS) {
                 results.push(p);
             }
         }
@@ -123,21 +126,21 @@ class Voronoi {
     changeBallPos(index, delta) {
         var nextPoint = {x: this.points[index].x + delta * this.speeds[index].x,
             y: this.points[index].y + delta * this.speeds[index].y};
-        if (nextPoint.x < EPSILON) {
+        if (nextPoint.x < RADIUS) {
             this.speeds[index].x = -this.speeds[index].x;
-            nextPoint.x = EPSILON;
+            nextPoint.x = RADIUS;
         }
-        if (nextPoint.x > this.canvas_width+EPSILON) {
+        if (nextPoint.x > this.canvas_width-RADIUS) {
             this.speeds[index].x = -this.speeds[index].x;
-            nextPoint.x = this.canvas_width+EPSILON;
+            nextPoint.x = this.canvas_width-RADIUS;
         }
-        if (nextPoint.y < EPSILON) {
+        if (nextPoint.y < RADIUS) {
             this.speeds[index].y = -this.speeds[index].y;
-            nextPoint.y = EPSILON;
+            nextPoint.y = RADIUS;
         }
-        if (nextPoint.y > this.canvas_height+EPSILON) {
+        if (nextPoint.y > this.canvas_height-RADIUS) {
             this.speeds[index].y = -this.speeds[index].y;
-            nextPoint.y = this.canvas_height+EPSILON;
+            nextPoint.y = this.canvas_height-RADIUS;
         }
         this.points[index] = nextPoint;
 
