@@ -1,4 +1,4 @@
-EPSILON = 0.01;
+EPSILON = 5;
 
 function point(x,y) {
     return {x:x,y:y};
@@ -27,9 +27,9 @@ class Voronoi {
         this.timeBorn=Date.now();
         this.timeLastUpdate=Date.now();
         for (var i = 0; i < points_no; i++) {
-            var r = (40+randomInt(160));
-            var g = (40+randomInt(160));
-            var b = (40+randomInt(160));
+            var r = (50+randomInt(160));
+            var g = (50+randomInt(160));
+            var b = (50+randomInt(160));
             this.colors.push({r:r,g:g,b:b, a:255});
             this.points.push({x:randomInt(canvas_width),y:randomInt(canvas_height)});
             this.speeds.push({x:-10+Math.random()*20,y:-10+Math.random()*20});
@@ -42,7 +42,7 @@ class Voronoi {
     }
 
     pt_color(index) {
-        return colorString(this.colors[index].r-40,this.colors[index].g-40,this.colors[index].b-40);
+        return colorString(this.colors[index].r-50,this.colors[index].g-50,this.colors[index].b-50);
     }
 
     clicked_color(index) {
@@ -77,10 +77,12 @@ class Voronoi {
 
         redrawByPixels(ctx,this.canvas_width, this.canvas_height,this.matrix, colors);
 
-        ctx.font="7vmin Arial";
+        ctx.font="10vmin Arial";
         for (var p = 0; p < this.points_no; p++) {
-            //drawCircle(ctx, this.points[p].x,this.points[p].y, 10, this.pt_color(p));
-            ctx.fillStyle = this.pt_color(p);
+
+
+            drawCircle(ctx, this.points[p].x,this.points[p].y, 10, this.pt_color(p));
+            ctx.fillStyle = "black";
             ctx.fillText(""+p,this.points[p].x,this.points[p].y);
         }
 
@@ -93,11 +95,24 @@ class Voronoi {
         return this.matrix[Math.floor(mousePos.y)][Math.floor(mousePos.x)];
     }
 
+    clickedInto(mousePos) {
+        var results=[];
+        for (var p = 0; p < this.points_no; p++) {
+            if (pointsDistance(this.points[p],mousePos)<EPSILON) {
+                results.push(p);
+            }
+        }
+        return results;
+    }
+
     click(mousePos) {
         var index = this.clickedOn(mousePos);
         console.log("Clicked on " + index);
-        if (this.maxClicked+1==index) {
-            this.maxClicked=index;
+        var indices_radii=this.clickedInto(mousePos);
+        console.log("Clicked into " + indices_radii);
+        if (this.maxClicked+1==index || indices_radii.includes(this.maxClicked+1)) {
+            this.maxClicked+=1;
+            console.log("Good click");
         }
         else {
             console.log("Wrong click");

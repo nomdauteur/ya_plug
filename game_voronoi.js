@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded",load);
 function load() {
     document.getElementById('canvas').addEventListener("click",canvasClicked);
     resize();
-    v = new Voronoi(10, WIDTH, HEIGHT);
+    v = new Voronoi(25, WIDTH, HEIGHT);
     v.draw(ctx);
     window.requestAnimationFrame(update);
 }
