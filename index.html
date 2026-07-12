@@ -26,19 +26,18 @@
 </head>
 <body id = "body" onresize="resize()">
 <div style="position:fixed; background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);"  id = "upper">
-    <p id="level"></p>
-    <p id="goal"></p>
-    <p id="hint" style="font-size:1vw"></p>
+    <p id="hint" style="font-size:2vw"></p>
 </div>
 <canvas style="position:fixed;" id="canvas">
 </canvas>
 <div style="position:fixed; background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);"  id = "lower">
-    <p style="margin-right:0.5vw;display:flex"><button id="retry" onclick = "retry()"></button>
-        <button id="check" onclick = "check()"></button>
-        <button id="next" onclick = "next()"></button></p>
-    <p style="padding-left:0.5vw; display:none; font-size:1.75vw" id="score"></p>
-    <p style="padding-left:0.5vw; display:none" id="yours"></p>
-    <p style="padding-left:0.5vw; display:none; font-size:1.5vw" id="extra"></p>
+
+    <p style="padding-left:0.5vw; font-size:1.75vw" id="progress"></p>
+    <p style="padding-left:0.5vw;" id="timer"></p>
+    <p><button id="newGame" onclick = "newGame()"></button></p>
+
+
+
 </div>
 <p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">Language</p>
 </body>

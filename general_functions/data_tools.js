@@ -17,3 +17,10 @@ function removeElementsByClass(className){
         elements[0].parentNode.removeChild(elements[0]);
     }
 }
+
+function timeString(delta) {
+    int_mins = Math.floor(delta / 1000 / 60);
+    secs = ("0"+Math.floor(delta / 1000 - 60* int_mins)).slice(-2);
+    mins = ("0"+int_mins).slice(-2);
+    return `${mins}:${secs}`;
+}

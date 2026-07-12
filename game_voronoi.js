@@ -11,8 +11,12 @@ var RATIO_DOWN=16;
 
 var isGameOn;
 
+var points_no=25;
+
 var v;
 window.mousePos={x:0,y:0};
+
+
 
 
 
@@ -23,7 +27,8 @@ window.addEventListener('mousemove', updateMouse, false);
 function resize() {
     var w,h;
 
-    if (window.innerWidth >= RATIO_UP/RATIO_DOWN*window.innerHeight)
+    //This enforces strict 9x16, I want broader
+    /*if (window.innerWidth >= RATIO_UP/RATIO_DOWN*window.innerHeight)
     {
         w = window.innerHeight * RATIO_UP/RATIO_DOWN;
         h = window.innerHeight;
@@ -31,31 +36,38 @@ function resize() {
     else {
         w = window.innerWidth;
         h = window.innerWidth * RATIO_DOWN/RATIO_UP;
-    }
+    }*/
+    w = 0.9*window.innerWidth;
+    h=window.innerHeight;
     console.log(""+w+", "+h);
+
+    first_border_height = 0.1*h;
+    second_border_height = 0.85*h;
     //WIDTH=Math.floor(w) * 10;
     //HEIGHT=Math.floor(h * RATIO_UP/RATIO_DOWN) * 10;
 
-    ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
+
+
+
     ctx.font="bold 5vmin Arial";
     document.getElementById('upper').style.top = 0 +"px";
     document.getElementById('upper').style.left = (window.innerWidth-w)/2 +"px";
     document.getElementById('upper').style.width = w +"px";
-    document.getElementById('upper').style.height = h * (RATIO_UP/3)/RATIO_DOWN +"px";
+    document.getElementById('upper').style.height = first_border_height +"px";
 
 
     document.getElementById('canvas').style.width = w +"px";
-    document.getElementById('canvas').style.height = h * RATIO_UP/RATIO_DOWN +"px";
+    document.getElementById('canvas').style.height = (second_border_height-first_border_height) +"px";
     document.getElementById('canvas').width=WIDTH;
     document.getElementById('canvas').height = HEIGHT;
-    document.getElementById('canvas').style.top = h*(RATIO_UP/3)/RATIO_DOWN +"px";
+    document.getElementById('canvas').style.top = first_border_height +"px";
     document.getElementById('canvas').style.left = (window.innerWidth-w)/2 +"px";
 
     document.getElementById('lower').style.width = w +"px";
-    document.getElementById('lower').style.height = h * (RATIO_DOWN-RATIO_UP-3)/RATIO_DOWN +"px";
-    document.getElementById('lower').style.top = h*(RATIO_UP+3)/RATIO_DOWN +"px";
+    document.getElementById('lower').style.height = (h-second_border_height) +"px";
+    document.getElementById('lower').style.top = second_border_height +"px";
     document.getElementById('lower').style.left = (window.innerWidth-w)/2 +"px";
-    console.log(""+WIDTH+", "+HEIGHT);
+
 
 
     if (v!=null && v != undefined) {
@@ -67,20 +79,60 @@ document.addEventListener("DOMContentLoaded",load);
 
 
 function load() {
+    ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
+    WIDTH=Math.floor(window.innerWidth*0.9) * 5;
+    HEIGHT=Math.floor(window.innerHeight*0.75) * 5;
+    document.getElementById('canvas').width=WIDTH;
+    document.getElementById('canvas').height = HEIGHT;
+
     document.getElementById('canvas').addEventListener("click",canvasClicked);
     resize();
-    v = new Voronoi(25, WIDTH, HEIGHT);
-    v.draw(ctx);
+
+    document.getElementById("newGame").textContent=setText("Новая игра","New game");
+
+    newGame();
+}
+
+function newGame() {
+    ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
+    WIDTH=Math.floor(window.innerWidth*0.9) * 5;
+    HEIGHT=Math.floor(window.innerHeight*0.75) * 5;
+    document.getElementById('canvas').width=WIDTH;
+    document.getElementById('canvas').height = HEIGHT;
+
+    document.getElementById("hint").innerHTML="<i>"+setText(
+        "Соберите цифры от 1 до "+points_no+" по порядку.",
+        "Collect numbers from 1 to "+points_no+" in order.")+"</i>";
+    document.getElementById("progress").textContent=setText("Вы нашли: 0","You found: 0");
+    document.getElementById("timer").textContent="0:00";
+    v = new Voronoi(points_no, WIDTH, HEIGHT);
+    v.draw();
     window.requestAnimationFrame(update);
 }
 
 function canvasClicked() {
     console.log("Mouse click inside canvas on "+window.mousePos.x+" "+window.mousePos.y);
     v.click(window.mousePos);
-    v.draw(ctx);
+    v.draw();
 }
 
 function update() {
-    v.update(ctx);
+    v.update();
+    document.getElementById("progress").textContent=setText("Вы нашли: "+v.maxFoundLabel(),
+        "You found: "+v.maxFoundLabel());
+    if (v.playerStartTime!=null) document.getElementById("timer").textContent=timeString(Date.now()-v.playerStartTime);
+    if (v.win==1) {
+        win();
+    }
     window.requestAnimationFrame(update);
+}
+
+
+
+function win() {
+    document.getElementById("progress").textContent=setText("Вы выиграли!",
+        "You won!");
+    document.getElementById("timer").textContent=setText("Ваш результат: ", "Your result is ")+
+        timeString(Date.now()-v.playerStartTime) +setText(" Хотите сыграть снова?", " Want to play again?");
+
 }

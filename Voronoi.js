@@ -1,9 +1,19 @@
 EPSILON = 5;
 RADIUS=10;
 
+function getContrastColor(r, g, b) {
+    // YIQ formula approximation
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+    // Return black for light backgrounds, white for dark backgrounds
+    return (yiq >= 128) ? {r:0,g:0,b:0,a:255} : {r:255,g:255,b:255,a:255};
+}
+
 function point(x,y) {
     return {x:x,y:y};
 }
+
+
 
 function colorString(color) {
     return `rgba(${color.r},${color.g},${color.b},${color.a})`;
@@ -14,7 +24,8 @@ function color(r,g,b,a=255) {
 }
 
 function antiColor(color) {
-    return {r:255-color.r,g:255-color.g,b:255-color.b,a:color.a};
+    //return {r:255-color.r,g:255-color.g,b:255-color.b,a:color.a};
+    return getContrastColor(color);
 }
 
 
@@ -29,6 +40,8 @@ class Voronoi {
         this.speeds=[];
         this.timeBorn=Date.now();
         this.timeLastUpdate=Date.now();
+        this.playerStartTime=null;
+        this.win=0;
         for (var i = 0; i < points_no; i++) {
             var r = (50+randomInt(160));
             var g = (50+randomInt(160));
@@ -38,6 +51,16 @@ class Voronoi {
             this.speeds.push({x:-10+Math.random()*20,y:-10+Math.random()*20});
         }
         this.matrix= Array.from({ length: canvas_height }, () => Array(canvas_width).fill(0));
+    }
+
+
+
+    label(index) {
+        return (index+1);
+    }
+
+    maxFoundLabel() {
+        return this.label(this.maxClicked);
     }
 
     colorString(index) {
@@ -67,9 +90,9 @@ class Voronoi {
         }
     }
 
-    draw(ctx) {
+    draw() {
         this.compute_matrix();
-        ctx.clearRect(0, 0, this.canvas_width, this.canvas_height);
+        ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
         ctx.fillStyle = "rgba(255,255,255,255)";
         ctx.fillRect(0, 0, this.canvas_width, this.canvas_height);
         var colors = [];
@@ -86,7 +109,7 @@ class Voronoi {
 
             drawCircle(ctx, this.points[p].x,this.points[p].y, RADIUS, colorString(this.pt_color(p)));
             ctx.fillStyle = colorString(antiColor(this.pt_color(p)));
-            ctx.fillText(""+p,this.points[p].x-(RADIUS/2),this.points[p].y+(RADIUS/2));
+            ctx.fillText(""+this.label(p),this.points[p].x-(RADIUS/2),this.points[p].y+(RADIUS/2));
         }
 
 
@@ -115,7 +138,11 @@ class Voronoi {
         console.log("Clicked into " + indices_radii);
         if (this.maxClicked+1==index || indices_radii.includes(this.maxClicked+1)) {
             this.maxClicked+=1;
+            if (this.playerStartTime===null) this.playerStartTime=Date.now();
             console.log("Good click");
+            if (this.maxClicked==this.points_no-1) {
+                this.win=1;
+            }
         }
         else {
             console.log("Wrong click");
@@ -146,7 +173,8 @@ class Voronoi {
 
     }
 
-    update(ctx) {
+    update() {
+        //ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
         var currTime = Date.now();
         var delta = (currTime-this.timeLastUpdate)/1000;
 
@@ -155,7 +183,7 @@ class Voronoi {
         }
 
         this.timeLastUpdate=currTime;
-        this.draw(ctx);
+        this.draw();
     }
 
 

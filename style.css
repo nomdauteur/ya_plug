@@ -1,18 +1,13 @@
 button {
-    background-color: rgba(0,0,50,255);
     color: rgba(255,255,205,255);
-    border-radius: 1vmin;
-    border: 0.1vw solid #FFFFCD;
+    background: none;
+    border-radius: 0.5vmin;
+    border: 0.01vw solid #FFFFCD;
+    font-size: 2vw;
     margin-left: 1vw;
     margin-right: 1vw;
 }
 
-button:disabled {
-    color: rgba(128,128,100,150);
-    border: 0.1vw solid #888867;
-    cursor: not-allowed;
-    opacity: 0.7; /* Optional: adds transparency */
-}
 
 p {
     color: rgba(255,255,205,255);
