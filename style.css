@@ -2,19 +2,19 @@ button {
     color: rgba(255,255,205,255);
     background: none;
     border-radius: 0.5vmin;
-    border: 0.01vw solid #FFFFCD;
-    font-size: 2vw;
-    margin-left: 1vw;
-    margin-right: 1vw;
+    border: 0.01vmin solid #FFFFCD;
+    font-size: 2vmin;
+    margin-left: 1vmin;
+    margin-right: 1vmin;
 }
 
 
 p {
     color: rgba(255,255,205,255);
-    margin-left: 2vw;
-    font-size: 2vw;
-    margin-bottom: 0.5vw;
-    margin-top: 0.5vw;
+    margin-left: 2vmin;
+    font-size: 2vmin;
+    margin-bottom: 0.5vmin;
+    margin-top: 0.5vmin;
 }
 
 h1 {
@@ -23,4 +23,27 @@ h1 {
 
 div {
     display: block;
+}
+
+.tabs{
+    display:flex;
+    padding:1vmin;
+    gap: 2vmin;
+}
+
+.tab {
+    align-items: center;
+    white-space: nowrap;
+    width: fit-content;
+    overflow: hidden;
+    padding-left:1vmin;
+    //padding-right:1vmin;
+    //margin-right: 2vmin;
+    flex:1;
+    color: rgba(255,255,205,255);
+    margin-left: 2vmin;
+    font-size: 2vmin;
+    margin-bottom: 0.5vmin;
+    margin-top: 0.5vmin;
+
 }

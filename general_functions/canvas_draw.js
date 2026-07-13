@@ -20,8 +20,8 @@ function drawCircle(ctx, x, y, radius, fill) {
     }
 }
 
-function imageDataIndex(x,y) {
-    return (x + y * canvas.width) * 4;
+function imageDataIndex(x,y,canvas_width) {
+    return (x + y * canvas_width) * 4;
 }
 
 function redrawByPixels(ctx,canvas_width, canvas_height,matrix, colors) { // matrix of pointers to colors[i]
@@ -30,7 +30,7 @@ function redrawByPixels(ctx,canvas_width, canvas_height,matrix, colors) { // mat
 
     for (let i = 0; i < canvas_height; i++) {
         for (let j = 0; j < canvas_width; j++) {
-            var index = imageDataIndex(j,i);
+            var index = imageDataIndex(j,i,canvas_width);
             var color = colors[matrix[i][j]];
             data[index]     = color.r;
             data[index + 1] = color.g; // Green

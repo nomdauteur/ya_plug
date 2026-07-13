@@ -26,20 +26,31 @@
 </head>
 <body id = "body" onresize="resize()">
 <div style="position:fixed; background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);"  id = "upper">
-    <p id="hint" style="font-size:2vw"></p>
+
+    <div class="tabs">
+        <div id="pts_hint" class="tab"></div>
+        <div class="tab" id="ten" style="border:0.5vmin solid #323232" onclick="makeTen()">10</div>
+        <div class="tab" id="t25"  onclick="makeT25()">25</div>
+        <div class="tab" id="t50" onclick="makeT50()">50</div>
+    </div>
+    <p id="hint" style="font-size:2vmin"></p>
 </div>
 <canvas style="position:fixed;" id="canvas">
 </canvas>
 <div style="position:fixed; background: radial-gradient(circle at 45% 16%, #c47846, #2c535a);"  id = "lower">
 
-    <p style="padding-left:0.5vw; font-size:1.75vw" id="progress"></p>
-    <p style="padding-left:0.5vw;" id="timer"></p>
-    <p><button id="newGame" onclick = "newGame()"></button></p>
+    <div class="tabs">
+        <div class="tab">
+            <p style="padding-left:0.5vmin; font-size:1.75vmin" id="progress"></p>
+            <p style="padding-left:0.5vmin;" id="timer"></p>
+        </div>
+        <div class="tab"><button id="newGame" onclick = "newGame()"></button></div>
+    </div>
 
 
 
 </div>
-<p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">Language</p>
+<p id="lang" style="bottom:0px; left:95vmin; position:fixed; display:none;">Language</p>
 </body>
 
 </html>

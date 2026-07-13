@@ -11,14 +11,40 @@ var RATIO_DOWN=16;
 
 var isGameOn;
 
-var points_no=25;
+
 
 var v;
 window.mousePos={x:0,y:0};
+window.points_no=10;
 
+border_style="0.5vmin solid #323232";
 
+function makeTen() {
+    if (window.points_no==10) return;
+    window.points_no = 10;
+    document.getElementById("ten").style.border=border_style;
+    document.getElementById("t25").style.border="none";
+    document.getElementById("t50").style.border="none";
+    if (v!=null && v != undefined) newGame();
+}
 
+function makeT25() {
+    if (window.points_no==25) return;
+    window.points_no = 25;
+    document.getElementById("ten").style.border="none";
+    document.getElementById("t25").style.border=border_style;
+    document.getElementById("t50").style.border="none";
+    if (v!=null && v != undefined) newGame();
+}
 
+function makeT50() {
+    if (window.points_no==50) return;
+    window.points_no = 50;
+    document.getElementById("ten").style.border="none";
+    document.getElementById("t25").style.border="none";
+    document.getElementById("t50").style.border=border_style;
+    if (v!=null && v != undefined) newGame();
+}
 
 window.addEventListener('mousemove', updateMouse, false);
 
@@ -39,15 +65,9 @@ function resize() {
     }*/
     w = 0.9*window.innerWidth;
     h=window.innerHeight;
-    console.log(""+w+", "+h);
 
-    first_border_height = 0.1*h;
+    first_border_height = 0.12*h;
     second_border_height = 0.85*h;
-    //WIDTH=Math.floor(w) * 10;
-    //HEIGHT=Math.floor(h * RATIO_UP/RATIO_DOWN) * 10;
-
-
-
 
     ctx.font="bold 5vmin Arial";
     document.getElementById('upper').style.top = 0 +"px";
@@ -68,9 +88,13 @@ function resize() {
     document.getElementById('lower').style.top = second_border_height +"px";
     document.getElementById('lower').style.left = (window.innerWidth-w)/2 +"px";
 
-
-
     if (v!=null && v != undefined) {
+        ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
+        WIDTH=Math.floor(window.innerWidth*0.9) * 3;
+        HEIGHT=Math.floor(window.innerHeight*0.73) * 3;
+        document.getElementById('canvas').width=WIDTH;
+        document.getElementById('canvas').height = HEIGHT;
+        v.resize(WIDTH,HEIGHT);
         v.draw();
     }
 }
@@ -80,13 +104,15 @@ document.addEventListener("DOMContentLoaded",load);
 
 function load() {
     ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
-    WIDTH=Math.floor(window.innerWidth*0.9) * 5;
-    HEIGHT=Math.floor(window.innerHeight*0.75) * 5;
+    WIDTH=Math.floor(window.innerWidth*0.9) * 3;
+    HEIGHT=Math.floor(window.innerHeight*0.73) * 3;
     document.getElementById('canvas').width=WIDTH;
     document.getElementById('canvas').height = HEIGHT;
 
     document.getElementById('canvas').addEventListener("click",canvasClicked);
     resize();
+
+    document.getElementById("pts_hint").innerHTML="<i>"+setText("Выберите сложность:","Choose difficulty:")+"</i>";
 
     document.getElementById("newGame").textContent=setText("Новая игра","New game");
 

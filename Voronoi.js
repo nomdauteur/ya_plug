@@ -76,6 +76,7 @@ class Voronoi {
     }
 
     compute_matrix() { // for now static
+        this.matrix= Array.from({ length: this.canvas_height }, () => Array(this.canvas_width).fill(0));
         for (var i = 0; i < this.canvas_height; i++) {
             for (var j = 0; j < this.canvas_width; j++) {
                 var min_distance = pointsDistance(this.points[0], point(j,i));
@@ -91,10 +92,11 @@ class Voronoi {
     }
 
     draw() {
-        this.compute_matrix();
         ctx = document.getElementById('canvas').getContext('2d', { willReadFrequently: true });
         ctx.fillStyle = "rgba(255,255,255,255)";
         ctx.fillRect(0, 0, this.canvas_width, this.canvas_height);
+
+        this.compute_matrix();
         var colors = [];
         for (var p = 0; p < this.points_no; p++) {
             if (p <= this.maxClicked) colors.push(this.clicked_color(p));
@@ -183,6 +185,12 @@ class Voronoi {
         }
 
         this.timeLastUpdate=currTime;
+        this.draw();
+    }
+
+    resize(canvas_width,canvas_height) {
+        this.canvas_width = canvas_width;
+        this.canvas_height = canvas_height;
         this.draw();
     }
 
