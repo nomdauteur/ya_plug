@@ -56,6 +56,7 @@ class Voronoi {
             //this.speeds.push({x:-10+Math.random()*20,y:-10+Math.random()*20});
         }
         this.matrix= Array.from({ length: canvas_height }, () => Array(canvas_width).fill(0));
+        this.compute_matrix();
     }
 
 
@@ -102,7 +103,7 @@ class Voronoi {
         ctx.fillStyle = "rgba(255,255,255,255)";
         ctx.fillRect(0, 0, this.canvas_width, this.canvas_height);
 
-        this.compute_matrix();
+
         var colors = [];
         for (var p = 0; p < this.points_no; p++) {
             if (p <= this.maxClicked) colors.push(this.clicked_color(p));
@@ -214,6 +215,7 @@ class Voronoi {
         this.canvas_width = canvas_width;
         this.canvas_height = canvas_height;
         for (var p = 0; p < this.points_no; p++) {this.unhole_static_ball(p);}
+        this.compute_matrix();
         //updateRadius(canvas_width);
         this.draw();
     }
