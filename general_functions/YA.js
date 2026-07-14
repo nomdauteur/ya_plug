@@ -1,4 +1,4 @@
-function init_with_lang(ya_flag, foo) {
+function init_with_lang(ya_flag, foo, foo_before=()=>{}) {
     if (ya_flag===0) {
         foo();
         return;
@@ -7,6 +7,7 @@ function init_with_lang(ya_flag, foo) {
         YaGames.init()
             .then((ysdk) => {
                 document.getElementById("lang").textContent=ysdk.environment.i18n.lang;
+                foo_before();
                 ysdk.features.LoadingAPI?.ready();
 
                 while (document.getElementById("lang").textContent == "Language") {
@@ -41,7 +42,7 @@ function stop(ya_flag) {
         });
 }
 
-function show_ads(ya_flag, foo) {
+function show_ads(ya_flag, foo, start_flag) {
     var shouldShow = Math.random();
     if (shouldShow > 0.5 && ya_flag===1) {
         YaGames.init()
@@ -49,6 +50,7 @@ function show_ads(ya_flag, foo) {
                 ysdk.adv.showFullscreenAdv({
                     callbacks: {
                         onClose: function(wasShown) {
+                            if (start_flag==1) {ysdk.features.GameplayAPI?.start;}
                             foo();
                         },
                         onError: function(error) {
@@ -86,7 +88,7 @@ function get_leaderboard(ya_flag, lb_name, start_flag) {
         .then((ysdk) => {
 
             ysdk.leaderboards.getEntries(lb_name, { quantityTop: 3, includeUser: true, quantityAround: 3 })
-                        .then(res => {window.leaderboard=res; if (start_flag==1) {ysdk.features.GameplayAPI?.start;} drawLeaderboard(lb_name,lb_label_ru,lb_label_en)});
+                .then(res => {window.leaderboard=res; if (start_flag==1) {ysdk.features.GameplayAPI?.start;} drawLeaderboard(lb_name,lb_label_ru,lb_label_en)});
             ysdk.leaderboards.getPlayerEntry(lb_name)
                 .then(res => {
                     window.prev_score=res.score;})
@@ -96,4 +98,3 @@ function get_leaderboard(ya_flag, lb_name, start_flag) {
                 });
         });
 }
-
