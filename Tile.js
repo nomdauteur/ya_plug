@@ -1,29 +1,25 @@
 class Tile {
-
-
-    constructor(value,x,y,width,height) { //type as num, cell as e4
-        this.value=value;
-        this.cell={"x":x,"y":y};
-        this.visited=0;
-        this.width=width;
-        this.height=height;
+    constructor(field_side, original_place) {
+        this.field_side = field_side;
+        this.original_place = original_place;
+        this.current_place = original_place;
     }
 
-
-    existsNextCell(eventKey) {
-        if (eventKey!="ArrowRight" && eventKey!="ArrowLeft" && eventKey!="ArrowUp"&& eventKey!="ArrowDown") return false;
-        if (eventKey=="ArrowRight") return (this.cell.x<this.width-1);
-        if (eventKey=="ArrowLeft") return (this.cell.x>0);
-        if (eventKey=="ArrowUp") return (this.cell.y>0);
-        if (eventKey=="ArrowDown") return (this.cell.y<this.height-1);
+    update_coordinates(new_place) {
+        this.current_place = new_place;
     }
 
-
-
-    existsNextCellInDir(dir) {
-        return (this.cell.x+dir[1]>=0 && this.cell.x+dir[1]<=this.width-1 && this.cell.y+dir[0]>=0 && this.cell.y+dir[0]<=this.height-1);
+    isMisplaced() {
+        return (this.original_place.x == this.current_place.x && this.original_place.y == this.current_place.y);
     }
 
-
+    color() {
+        let delta = 256 * 256 * 256 / (this.field_side * this.field_side);
+        let coord1d = this.original_place.y * this.field_side + this.original_place.x;
+        let b = (coord1d * delta) % 256;
+        let r = Math.floor(coord1d * delta / (256*256));
+        let g = Math.floor((coord1d * delta - 256*r) / 256);
+        return `rgba(${r},${g},${b},255)`;
+    }
 
 }
