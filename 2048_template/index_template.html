@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html oncontextmenu="return false">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta http-equiv="refresh" content="0.5" > -->
+    <meta name="Description" CONTENT="Template-2048">
+    <meta name="viewport" content="height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <script src="/sdk.js"></script>
+    <title>Template-2048</title>
+
+    <!--Path from the root, not from template folder, BC gets mover anyway-->
+    <link href="general_functions/general_style_helper.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="general_functions/data_tools.js"></script>
+    <script src="general_functions/interface_helpers.js"></script>
+    <script src="general_functions/math_handlers.js"></script>
+    <script src="general_functions/mouse_handlers.js"></script>
+    <script src="general_functions/style_helpers.js"></script>
+    <script src="general_functions/text_helpers.js"></script>
+    <script src="general_functions/YA.js"></script>
+    <script src="Tile.js"></script>
+    <script src="Field.js"></script>
+    <script src="game_2048.js"></script>
+
+</head>
+<body style="background: radial-gradient(ellipse at 68% 73%, #bd5f8c, #3b716b);">
+
+    <!--Several mods, if needed, otherwise delete-->
+    <div class="tabs">
+        <div class="tab" id="mandelbrot" style="border:0.5vmin solid #323232" onclick="activateMandelbrot()"></div>
+        <div class="tab" id="burning"  onclick="activateBurning()"></div>
+        <div class="tab" id="inverse" onclick="activateInverse()"></div>
+    </div>
+
+        <div id="game" style="width:98vw; overflow: hidden; word-wrap: break-word;white-space:pre-wrap;" class="everything" ></div>
+    <div class="lows">
+        <p class="low" id="score">Счет:</p>
+        <p class="low" id="newGame" style="text-align:center;" onclick="newGame()">New game</p>
+    </div>
+    <p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">Language</p>
+</body>
+
+</html>
