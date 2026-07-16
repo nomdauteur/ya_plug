@@ -14,12 +14,20 @@ class Tile {
     }
 
     color() {
-        let delta = 256 * 256 * 256 / (this.field_side * this.field_side);
+        /*let delta = 256 * 256 * 256 / (this.field_side * this.field_side);
         let coord1d = this.original_place.y * this.field_side + this.original_place.x;
         let b = (coord1d * delta) % 256;
         let r = Math.floor(coord1d * delta / (256*256));
-        let g = Math.floor((coord1d * delta - 256*r) / 256);
-        return `rgba(${r},${g},${b},255)`;
+        let g = Math.floor((coord1d * delta - 256*r) / 256);*/
+        let u = this.original_place.x / (this.field_side - 1);
+        let v = this.original_place.x / (this.field_side - 1);
+
+        let r = (1 - v) * (0.2 + 0.8*u);
+        let g = 0;
+        let b = v * (0.2 + 0.8*u);
+
+
+        return `rgba(${r*255},${g*255},${b*255},255)`;
     }
 
 }
