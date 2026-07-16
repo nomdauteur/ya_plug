@@ -1,4 +1,4 @@
-function drawLeaderboard(lb_name, lb_label_ru, lb_label_en) {
+function drawLeaderboard(lb_name, lb_label_ru, lb_label_en, should_auth_flag=0) {
     ll = document.getElementById("leaderboard");
 
     while (ll.firstChild) {
@@ -33,6 +33,18 @@ function drawLeaderboard(lb_name, lb_label_ru, lb_label_en) {
         d.appendChild(d2);
 
         ll.appendChild(d);
+
+
+    }
+
+    if (should_auth_flag==1) {
+        var a = document.createElement("div");
+        a.style.display="table-row";
+        a.style.paddingLeft=vmin(6);
+        a.id="auth"
+        a.innerHTML=setText(`<i>Вы не вошли. <a onclick="call_auth()">Войдите</a>, чтобы сюда попасть!</i>`,
+            `<i>You didn't log in. <a onclick="call_auth()">Log in</a> to get here!</i>`);
+        ll.appendChild(a);
     }
 
 }

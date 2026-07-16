@@ -79,7 +79,7 @@ function set_leaderboard(ya_flag, lb_name, value, foo_after, stop_flag) {
         }).catch(console.error);;
 }
 
-function get_leaderboard(ya_flag, lb_name, start_flag) {
+function get_leaderboard(ya_flag, lb_name, start_flag, skip_auth=0) {
     if (ya_flag==0) return;
 
     YaGames.init()
@@ -87,7 +87,20 @@ function get_leaderboard(ya_flag, lb_name, start_flag) {
         .then((ysdk) => {
 
             ysdk.leaderboards.getEntries(lb_name, { quantityTop: 3, includeUser: true, quantityAround: 3 })
-                        .then(res => {console.log("LOGGED LEADERBOARD");console.log(res); window.leaderboard=res; if (start_flag==1) {ysdk.features.GameplayAPI?.start;} drawLeaderboard(lb_name,lb_label_ru,lb_label_en)});
+                        .then(res => {
+                            console.log("LOGGED LEADERBOARD");
+                            console.log(res);
+                            window.leaderboard=res;
+                            if (start_flag==1) {ysdk.features.GameplayAPI?.start;}
+                            if (skip_auth==0) ysdk.getPlayer().then(_player => {
+                                if (!_player.isAuthorized()) {
+                                    drawLeaderboard(lb_name,lb_label_ru,lb_label_en,1);
+                            }
+                                else {
+                                    drawLeaderboard(lb_name,lb_label_ru,lb_label_en,0);
+                                }
+                            })
+                            });
             ysdk.leaderboards.getPlayerEntry(lb_name)
                 .then(res => {console.log(res);
                     window.prev_score=res.score;})
@@ -96,5 +109,19 @@ function get_leaderboard(ya_flag, lb_name, start_flag) {
                         window.prev_score=0;}
                 });
         });
+}
+
+function call_auth() {
+    window.isPaused=true;
+    document.getElementById("auth").style.display="none";
+    YaGames.init()
+
+        .then((ysdk) => {
+            ysdk.auth.openAuthDialog().then(ysdk.getPlayer().then(_player => {
+                get_leaderboard(ya_flag, lb_name, 0,1);
+                console.log("Returned from auth");
+                window.isPaused=false;
+            }))
+        }).catch(err=>{console.log("Error when authorizing: "+err)});
 }
 

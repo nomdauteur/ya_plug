@@ -46,7 +46,7 @@ button
     margin:auto;
     border-radius: 5vmin;
     font-size:6vw;
-    height:20vh;
+    height:25vh;
     width:38vw;
 }
 
@@ -97,4 +97,14 @@ button
 
 h1 {
     font-size: 3vmin;
+}
+
+a {
+    color: blue;
+    text-decoration-line: underline;
+}
+
+/* Цвет посещенной ссылки */
+a:visited {
+    color: purple;
 }

@@ -5,6 +5,8 @@ var ya_flag=1;
 
 window.prev_score=0;
 
+window.isPaused=false;
+
 document.addEventListener("DOMContentLoaded",load);
 window.addEventListener("resize",() => {return false;});
 
@@ -34,7 +36,7 @@ function setTimer(){
     window.sec = 10.0;
     window.timer = setInterval(function(){
         document.getElementById('safeTimerDisplay').innerHTML=setText("Таймер: ","Timer: ")+Math.floor(sec);
-        window.sec=window.sec-0.01;
+        if (!window.isPaused) window.sec=window.sec-0.01;
         if (window.sec < 0) {
             lives -=1;
             document.getElementById("lives").textContent=setText("Осталось жизней: ","Lives left: ")+String.fromCodePoint(10084).repeat(lives);
@@ -158,9 +160,11 @@ function displayProblem() {
         document.getElementById("right_button").innerHTML=problem.correct_answer;
         document.getElementById("left_button").innerHTML=problem.other_answer;
         document.getElementById("right_button").onclick=function(){
+            window.isPaused=false;
             displayCorrect("right_button");
         };
         document.getElementById("left_button").onclick=function(){
+            window.isPaused=false;
             displayIncorrect("left_button");
         };
         document.getElementById("right_button").className="correct";
@@ -171,10 +175,12 @@ function displayProblem() {
         document.getElementById("right_button").innerHTML=problem.other_answer;
 
         document.getElementById("left_button").onclick=function(){
+            window.isPaused=false;
             displayCorrect("left_button");
         };
 
         document.getElementById("right_button").onclick=function(){
+            window.isPaused=false;
             displayIncorrect("right_button");
         };
         document.getElementById("right_button").className="incorrect";
