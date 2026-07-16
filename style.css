@@ -18,3 +18,52 @@
     align-items: center;
     font-family: sans-serif;
 }
+
+.arrow {
+    background-color: rgba(205,205,205,255);
+    position:absolute;
+    text-align: center;
+    border-radius: 0.5vmin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family:"Work Sans";
+}
+
+button {
+    text-align: center;
+    border-radius: 3vmin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    height: fit-content;
+
+}
+
+.tab {
+    text-align: center;
+    border-radius: 3vmin;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    //width: 45%;
+    text-overflow:ellipsis;
+    height:fit-content;
+    padding-left:3vmin;
+    padding-right:3vmin;
+    margin-right: 2vmin;
+    font-size: 2vmin;
+    flex:1;
+
+}
+
+.tabs{
+    display:flex;
+    border-bottom:2px solid #ccc;
+    padding:1vmin;
+    gap: 2vmin;
+}

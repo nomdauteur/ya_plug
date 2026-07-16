@@ -24,20 +24,27 @@
     <script src="Game.js"></script>
 
 </head>
-<body style="background: radial-gradient(ellipse at 69% 46%, #a0d273, #3f59bf);">
+<body id = "body" style="background: radial-gradient(ellipse at 69% 46%, #a0d273, #3f59bf);">
+<div style="position:fixed;" id = "upper">
+    <h1 id="header" style="position:flexbox; top:0px;align-self: flex-start;">Rubikle!</h1>
+    <p id="man" style="position:flexbox;"></p>
 
+</div>
+<div style="position:fixed;" id="canvas">
+</div>
+
+<div style="position:fixed;" id = "lower">
     <div class="tabs">
-        <div class="tab" id="mandelbrot" style="border:0.5vmin solid #323232" onclick="activateMandelbrot()"></div>
-        <div class="tab" id="burning"  onclick="activateBurning()"></div>
-        <div class="tab" id="inverse" onclick="activateInverse()"></div>
-    </div>
+        <div class="tab"><button id="checkButton"  onclick="check()">Проверить!</button></div>
+        <div class="tab"><button id="changeButton"  onclick="changeGame()">Случайная игра</button></div></div>
+    <div id="res" style="display:none; position:flexbox;"><textarea rows="5" cols="50" id="results"></textarea>
+        </div>
 
-        <div id="game" style="width:98vw; overflow: hidden; word-wrap: break-word;white-space:pre-wrap;" class="everything" ></div>
-    <div class="low">
-        <p class="lows" id="score">Счет:</p>
-        <p class="lows" id="newGame" style="text-align:center;" onclick="newGame()">New game</p>
-    </div>
-    <p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">Language</p>
+</div>
+
+<p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">EN</p>
+
 </body>
+
 
 </html>

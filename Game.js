@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded",load);
-//window.addEventListener("resize",() => {resize();});
 
 
-theField = new Field(5);
+
+theField = new Field(4);
+
+window.addEventListener("resize",() => {theField.resize();});
 
 function load() {
     theField.draw_field();

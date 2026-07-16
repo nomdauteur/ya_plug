@@ -21,6 +21,8 @@ class Field {
         this.field_side = field_side;
         this.tiles = [];
         this.tile_indices=[];
+        this.shift_count=0;
+        this.emojis="";
         for (var i = 0; i < field_side; i++) {
             this.tiles.push([]);
             this.tile_indices.push([]);
@@ -32,7 +34,6 @@ class Field {
     }
 
     draw_field() {
-        console.log("Fuck you");
 
         for (var i = 0; i <this.field_side; i++) {
             for (var j=0; j < this.field_side; j++) {
@@ -46,10 +47,50 @@ class Field {
                 d.style.height=SIDE+"px";
                 d.style.fontSize="16vmin";
 
-                document.getElementById("game").appendChild(d);
-
+                document.getElementById("canvas").appendChild(d);
             }
         }
+
+        let theField = this;
+
+        for (var i = 0; i <this.field_side; i++) {
+            var d1 = document.createElement("div");
+            d1.id="left_arrow_pos_"+i;
+            d1.className="arrow";
+            d1.innerText=String.fromCodePoint(9664);
+            d1.addEventListener('click', function () {
+                theField.shift(this.id)
+            }, false);
+            document.getElementById("canvas").appendChild(d1);
+
+            var d2 = document.createElement("div");
+            d2.id="right_arrow_pos_"+i;
+            d2.className="arrow";
+            d2.innerText=String.fromCodePoint(9654);
+            d2.addEventListener('click', function () {
+                theField.shift(this.id)
+            }, false);
+            document.getElementById("canvas").appendChild(d2);
+
+            var d3 = document.createElement("div");
+            d3.id="up_arrow_pos_"+i;
+            d3.className="arrow";
+            d3.innerText=String.fromCodePoint(9650);
+            d3.addEventListener('click', function () {
+                theField.shift(this.id)
+            }, false);
+            document.getElementById("canvas").appendChild(d3);
+
+            var d4 = document.createElement("div");
+            d4.id="down_arrow_pos_"+i;
+            d4.className="arrow";
+            d4.innerText=String.fromCodePoint(9660);
+            d4.addEventListener('click', function () {
+                theField.shift(this.id)
+            }, false);
+            document.getElementById("canvas").appendChild(d4);
+        }
+        this.resize();
 
 
         //start(ya_flag);
@@ -58,16 +99,149 @@ class Field {
 
 
     draw() {
-        console.log("Fuck you harder");
 
         for (var i = 0; i < this.field_side; i++)
             for (var j = 0; j < this.field_side; j++) {
                 let index = this.tile_indices[i][j];
-                console.log(this.tiles[index.y][index.x].color());
                 document.getElementById("cell_"+i+"_"+j).style.backgroundColor=
                     this.tiles[index.y][index.x].color();
             }
 
+
+    }
+
+    resize() {
+        var w,h;
+
+        if (window.innerWidth >= 9/16*window.innerHeight)
+        {
+            w = window.innerHeight * 9 / 16;
+            h = window.innerHeight;
+        }
+        else {
+            w = window.innerWidth;
+            h = window.innerWidth * 16 / 9;
+        }
+
+        document.getElementById('upper').style.top = 0 +"px";
+        document.getElementById('upper').style.left = (window.innerWidth-w)/2 +"px";
+        document.getElementById('upper').style.width = w +"px";
+        document.getElementById('upper').style.height = h * 3/16 +"px";
+
+        document.getElementById('canvas').style.width = w +"px";
+        document.getElementById('canvas').style.height = h * 9/16 +"px";
+        document.getElementById('canvas').style.top = h*3/16 +"px";
+        document.getElementById('canvas').style.left = (window.innerWidth-w)/2 +"px";
+
+        document.getElementById('lower').style.width = w +"px";
+        document.getElementById('lower').style.height = h * 4/16 +"px";
+        document.getElementById('lower').style.top = h*12/16 +"px";
+        document.getElementById('lower').style.left = (window.innerWidth-w)/2 +"px";
+
+        for (let i = 0; i <this.field_side; i++) {
+            for (let j = 0; j <this.field_side; j++) {
+                let cell = document.getElementById("cell_"+i+"_"+j);
+
+                cell.style.width = w/(this.field_side+4) +"px";
+                cell.style.height = w/(this.field_side+4) +"px";
+                cell.style.borderRadius = "2vmin";
+                cell.style.border = "0.1vmin solid #323232";
+                cell.style.top = w/(this.field_side+4)*(i+2) +"px";
+                cell.style.left = w/(this.field_side+4)*(j+2) +"px";
+                cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+            }
+        }
+
+        for (let i = 0; i <this.field_side; i++) {
+            let cell = document.getElementById("left_arrow_pos_"+i);
+            cell.style.width = w/(this.field_side+4) +"px";
+            cell.style.height = w/(this.field_side+4) +"px";
+            cell.style.top = w/(this.field_side+4)*(i+2) +"px";
+            cell.style.left = w/(this.field_side+4) - vmin(2)+"px";
+            cell.style.color="green";
+            cell.style.border = "0.1vmin solid #00FF00";
+            cell.style.marginRight="2vmin";
+            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+
+            cell = document.getElementById("right_arrow_pos_"+i);
+            cell.style.width = w/(this.field_side+4) +"px";
+            cell.style.height = w/(this.field_side+4) +"px";
+            cell.style.top = w/(this.field_side+4)*(i+2) +"px";
+            cell.style.left = w/(this.field_side+4) * (this.field_side+2) +"px";
+            cell.style.color="blue";
+            cell.style.border = "0.1vmin solid #0000FF";
+            cell.style.marginLeft="2vmin";
+            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+
+            cell = document.getElementById("up_arrow_pos_"+i);
+            cell.style.width = w/(this.field_side+4) +"px";
+            cell.style.height = w/(this.field_side+4) +"px";
+            cell.style.top = w/(this.field_side+4) - vmin(2) +"px";
+            cell.style.left = w/(this.field_side+4) * (i+2) +"px";
+            cell.style.color="orange";
+            cell.style.border = "0.1vmin solid #FFA500";
+            cell.style.marginBottom="4vmin";
+            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+
+            cell = document.getElementById("down_arrow_pos_"+i);
+            cell.style.width = w/(this.field_side+4) +"px";
+            cell.style.height = w/(this.field_side+4) +"px";
+            cell.style.top = w/(this.field_side+4)*(this.field_side+2) +"px";
+            cell.style.left = w/(this.field_side+4) * (i+2) +"px";
+            cell.style.color="red";
+            cell.style.border = "0.1vmin solid #FF0000";
+            cell.style.marginTop="2vmin";
+            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+        }
+
+
+//setField();
+    }
+
+    shift(id) {
+        this.shift_count+=1;
+        var splitted = id.split('_');
+        var direction = splitted[0];
+        var index = splitted[3];
+        if (direction == 'left') {
+            var new_string =new Array(this.field_side).fill({x:-1,y:-1});
+            for (var i = 0; i < this.field_side; i++) {
+                new_string[(this.field_side+i-1)%this.field_side]=this.tile_indices[index][i];
+            }
+            this.tile_indices[index] = new_string;
+            this.emojis+=String.fromCodePoint(8678);
+        }
+        if (direction == 'right') {
+            var new_string =new Array(this.field_side).fill({x:-1,y:-1});
+            for (var i = 0; i < this.field_side; i++) {
+                new_string[(i+1)%this.field_side]=this.tile_indices[index][i];
+            }
+            this.emojis+=String.fromCodePoint(8680);
+            this.tile_indices[index] = new_string;
+        }
+        if (direction == 'up') {
+            var new_string =new Array(this.field_side).fill({x:-1,y:-1});
+            for (var i = 0; i < this.field_side; i++) {
+                new_string[(this.field_side+i-1)%this.field_side]=this.tile_indices[i][index];
+            }
+            for (var i = 0; i < this.field_side; i++)
+                this.tile_indices[i][index] = new_string[i];
+
+            this.emojis+=String.fromCodePoint(8679);
+
+        }
+        if (direction == 'down') {
+            var new_string =new Array(this.field_side).fill({x:-1,y:-1});
+            for (var i = 0; i < this.field_side; i++) {
+                new_string[(i+1)%this.field_side]=this.tile_indices[i][index];
+            }
+            for (var i = 0; i < this.field_side; i++)
+                this.tile_indices[i][index] = new_string[i];
+
+            this.emojis+=String.fromCodePoint(8681);
+        }
+
+        this.draw();
 
     }
 

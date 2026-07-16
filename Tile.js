@@ -19,15 +19,12 @@ class Tile {
         let b = (coord1d * delta) % 256;
         let r = Math.floor(coord1d * delta / (256*256));
         let g = Math.floor((coord1d * delta - 256*r) / 256);*/
-        let u = this.original_place.x / (this.field_side - 1);
-        let v = this.original_place.x / (this.field_side - 1);
-
-        let r = (1 - v) * (0.2 + 0.8*u);
-        let g = 0;
-        let b = v * (0.2 + 0.8*u);
+        let r = 40 + (this.original_place.x/this.field_side) * 215;
+        let g = 40 + (this.original_place.y/this.field_side) * 215;
+        let b = 40;
 
 
-        return `rgba(${r*255},${g*255},${b*255},255)`;
+        return `rgba(${r},${g},${b},255)`;
     }
 
 }
