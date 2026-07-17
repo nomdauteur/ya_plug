@@ -10,7 +10,8 @@ class Tile {
     }
 
     isMisplaced() {
-        return (this.original_place.x == this.current_place.x && this.original_place.y == this.current_place.y);
+        console.log(`(${this.original_place.x},${this.original_place.y}) VS (${this.current_place.x},${this.current_place.y})`);
+        return (this.original_place.x != this.current_place.x || this.original_place.y != this.current_place.y);
     }
 
     color() {
@@ -25,6 +26,21 @@ class Tile {
 
 
         return `rgba(${r},${g},${b},255)`;
+    }
+
+    fontColor() {
+        let r = 40 + (this.original_place.x/this.field_side) * 215;
+        let g = 40 + (this.original_place.y/this.field_side) * 215;
+        let b = 40;
+        // YIQ formula approximation
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+        // Return black for light backgrounds, white for dark backgrounds
+        return (yiq >= 128) ? 'rgba(0,0,0,255)' : 'rgba(255,255,255,255)';
+    }
+
+    value() {
+        return this.original_place.y * this.field_side + this.original_place.x;
     }
 
 }

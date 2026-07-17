@@ -105,6 +105,9 @@ class Field {
                 let index = this.tile_indices[i][j];
                 document.getElementById("cell_"+i+"_"+j).style.backgroundColor=
                     this.tiles[index.y][index.x].color();
+                document.getElementById("cell_"+i+"_"+j).style.color=
+                    this.tiles[index.y][index.x].fontColor();
+                document.getElementById("cell_"+i+"_"+j).textContent = this.tiles[index.y][index.x].value();
             }
 
 
@@ -198,25 +201,20 @@ class Field {
 //setField();
     }
 
-    shift(id) {
-        this.shift_count+=1;
-        var splitted = id.split('_');
-        var direction = splitted[0];
-        var index = splitted[3];
+    atomary_shift(index,direction) {
+        console.log(`Shifting ${index} ${direction}`);
         if (direction == 'left') {
             var new_string =new Array(this.field_side).fill({x:-1,y:-1});
             for (var i = 0; i < this.field_side; i++) {
                 new_string[(this.field_side+i-1)%this.field_side]=this.tile_indices[index][i];
             }
             this.tile_indices[index] = new_string;
-            this.emojis+=String.fromCodePoint(8678);
         }
         if (direction == 'right') {
             var new_string =new Array(this.field_side).fill({x:-1,y:-1});
             for (var i = 0; i < this.field_side; i++) {
                 new_string[(i+1)%this.field_side]=this.tile_indices[index][i];
             }
-            this.emojis+=String.fromCodePoint(8680);
             this.tile_indices[index] = new_string;
         }
         if (direction == 'up') {
@@ -226,9 +224,6 @@ class Field {
             }
             for (var i = 0; i < this.field_side; i++)
                 this.tile_indices[i][index] = new_string[i];
-
-            this.emojis+=String.fromCodePoint(8679);
-
         }
         if (direction == 'down') {
             var new_string =new Array(this.field_side).fill({x:-1,y:-1});
@@ -237,12 +232,71 @@ class Field {
             }
             for (var i = 0; i < this.field_side; i++)
                 this.tile_indices[i][index] = new_string[i];
+        }
 
+        for (let i = 0; i < this.field_side; i++) {
+            for (let j = 0; j < this.field_side; j++) {
+                this.tiles[i][j].update_coordinates(this.tile_indices[i][j]);
+            }
+        }
+
+    }
+
+    shift(id) {
+        this.shift_count+=1;
+        var splitted = id.split('_');
+        var direction = splitted[0];
+        var index = splitted[3];
+        this.atomary_shift(index,direction);
+        if (direction == 'left') {
+            this.emojis+=String.fromCodePoint(8678);
+        }
+        if (direction == 'right') {
+            this.emojis+=String.fromCodePoint(8680);
+        }
+        if (direction == 'up') {
+            this.emojis+=String.fromCodePoint(8679);
+        }
+        if (direction == 'down') {
             this.emojis+=String.fromCodePoint(8681);
         }
 
         this.draw();
+        this.check();
 
+    }
+
+    make_level(shifts_no) {
+        let horizontal_shifts = 1+randomInt(shifts_no-2);
+        let vertical_shifts = shifts_no-horizontal_shifts;
+        for (var i = 0; i < shifts_no; i++) {
+            if (Math.random() < 0.5 && horizontal_shifts >0) {
+                this.atomary_shift(randomInt(this.field_side-1), ['left','right'][randomInt(1)]);
+                horizontal_shifts -= 1;
+            }
+            else {
+                this.atomary_shift(randomInt(this.field_side-1), ['up','down'][randomInt(1)]);
+                vertical_shifts -= 1;
+            }
+        }
+        this.draw();
+    }
+
+    check() {
+        let isMismatched = false;
+        for (let i = 0; i < this.field_side; i++) {
+            for (let j = 0; j < this.field_side; j++) {
+                if (this.tiles[i][j].isMisplaced()) {
+                    isMismatched = true;
+                    console.log("Mismatched!");
+                    return false;
+                }
+            }
+        }
+        if (!isMismatched) {
+            console.log("User won, write logic");
+            return true;
+        }
     }
 
 

@@ -8,4 +8,5 @@ window.addEventListener("resize",() => {theField.resize();});
 
 function load() {
     theField.draw_field();
+    theField.make_level(5);
 }
