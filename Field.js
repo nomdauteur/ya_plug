@@ -206,6 +206,7 @@ class Field {
     }
 
     atomary_shift(index,direction) {
+        console.log(`Shift ${index} to ${direction}`);
         if (direction == 'left') {
             var new_string =new Array(this.field_side).fill({x:-1,y:-1});
             for (var i = 0; i < this.field_side; i++) {
@@ -251,6 +252,7 @@ class Field {
 
     shift(id) {
         this.shift_count+=1;
+        document.getElementById("progress").textContent=setText("Ваши сдвиги: ","Your shifts: ")+theField.getShiftCount()
         var splitted = id.split('_');
         var direction = splitted[0];
         var index = splitted[3];
@@ -300,6 +302,12 @@ class Field {
             }
         }
         if (!isMismatched) {
+            let extraShifts = this.shift_count - window.shiftsNo;
+            let stars = Math.min(Math.max(Math.ceil(5 - extraShifts/2),1),5);
+
+            let stars_emojis = String.fromCodePoint(11088).repeat(stars);
+            document.getElementById("progress").textContent=setText("Вы победили. Ваш результат: ","You won. Your result: ")
+                +stars_emojis+ `(${this.shift_count}/${window.shiftsNo})` + setText(". Сыграйте еще раз!", ". Play again!");
             console.log("User won, write logic");
             return true;
         }
