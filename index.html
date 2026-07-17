@@ -26,20 +26,38 @@
 </head>
 <body id = "body" style="background: radial-gradient(ellipse at 69% 46%, #a0d273, #3f59bf);">
 <div style="position:fixed;" id = "upper">
-    <h1 id="header" style="position:flexbox; top:0px;align-self: flex-start;">Rubikle!</h1>
-    <p id="man" style="position:flexbox;"></p>
+    <p id="hint" style="font-size:2vmin"></p>
 
 </div>
 <div style="position:fixed;" id="canvas">
 </div>
 
 <div style="position:fixed;" id = "lower">
+    <div id="progress"></div>
+    <details><summary>Выбрать параметры новой игры</summary>
     <div class="tabs">
-        <div class="tab"><button id="checkButton"  onclick="check()">Проверить!</button></div>
-        <div class="tab"><button id="changeButton"  onclick="changeGame()">Случайная игра</button></div></div>
-    <div id="res" style="display:none; position:flexbox;"><textarea rows="5" cols="50" id="results"></textarea>
-        </div>
+            <div class="tab dropdown-group">
+                <label class="dropdown-label" for="fieldSizeSelect"></label>
+                <select class="dropdown" id="fieldSizeSelect" onchange="setFieldSize()">
+                    <option value="5">5</option>
+                    <option selected value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
 
+            <div class="tab dropdown-group">
+                <label class="dropdown-label" for="shiftsNoSelect"></label>
+                <select class="dropdown" id="shiftsNoSelect" onchange="setMovesNo()">
+                    <option value="5">5</option>
+                    <option selected value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+ </div>
+    </details>
+    <button id="changeButton" onclick="newGame()">Новая игра</button>
 </div>
 
 <p id="lang" style="bottom:0px; left:95vw; position:fixed; display:none;">EN</p>

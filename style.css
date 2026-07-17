@@ -40,6 +40,8 @@ button {
     overflow: hidden;
     text-overflow:ellipsis;
     height: fit-content;
+    margin-top:2vmin;
+    margin-left:2vmin;
 
 }
 
@@ -50,20 +52,26 @@ button {
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
-    //width: 45%;
+    width: fit-content;
     text-overflow:ellipsis;
     height:fit-content;
-    padding-left:3vmin;
-    padding-right:3vmin;
-    margin-right: 2vmin;
+    padding-left:1vmin;
+    padding-right:1vmin;
+    margin-right: 1vmin;
     font-size: 2vmin;
     flex:1;
 
 }
 
-.tabs{
+.tabs {
     display:flex;
     border-bottom:2px solid #ccc;
     padding:1vmin;
-    gap: 2vmin;
+    gap: 1vmin;
+    margin-top:2vmin;
+}
+
+details {
+    margin-top:2vmin;
+    margin-left:2vmin;
 }

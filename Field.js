@@ -18,7 +18,7 @@ TOP_OFFSET=vh(10);
 
 class Field {
     constructor(field_side) {
-        this.field_side = field_side;
+        this.field_side = parseInt(field_side);
         this.tiles = [];
         this.tile_indices=[];
         this.shift_count=0;
@@ -31,6 +31,7 @@ class Field {
                 this.tile_indices[i].push({x:j,y:i});
             }
         }
+
     }
 
     draw_field() {
@@ -141,60 +142,63 @@ class Field {
         document.getElementById('lower').style.top = h*12/16 +"px";
         document.getElementById('lower').style.left = (window.innerWidth-w)/2 +"px";
 
+        let ratio_4 = 4+parseInt(this.field_side);
+
         for (let i = 0; i <this.field_side; i++) {
             for (let j = 0; j <this.field_side; j++) {
                 let cell = document.getElementById("cell_"+i+"_"+j);
 
-                cell.style.width = w/(this.field_side+4) +"px";
-                cell.style.height = w/(this.field_side+4) +"px";
+                cell.style.width = w/ratio_4 +"px";
+                cell.style.height = w/ratio_4 +"px";
                 cell.style.borderRadius = "2vmin";
                 cell.style.border = "0.1vmin solid #323232";
-                cell.style.top = w/(this.field_side+4)*(i+2) +"px";
-                cell.style.left = w/(this.field_side+4)*(j+2) +"px";
-                cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+                cell.style.top = w/ratio_4*(i+2) +"px";
+                cell.style.left = w/ratio_4*(j+2) +"px";
+                cell.style.fontSize=w/ratio_4/2 +"px";
+
             }
         }
 
         for (let i = 0; i <this.field_side; i++) {
             let cell = document.getElementById("left_arrow_pos_"+i);
-            cell.style.width = w/(this.field_side+4) +"px";
-            cell.style.height = w/(this.field_side+4) +"px";
-            cell.style.top = w/(this.field_side+4)*(i+2) +"px";
-            cell.style.left = w/(this.field_side+4) - vmin(2)+"px";
+            cell.style.width = w/ratio_4 +"px";
+            cell.style.height = w/ratio_4 +"px";
+            cell.style.top = w/ratio_4*(i+2) +"px";
+            cell.style.left = w/ratio_4 - vmin(2)+"px";
             cell.style.color="green";
             cell.style.border = "0.1vmin solid #00FF00";
             cell.style.marginRight="2vmin";
-            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+            cell.style.fontSize=w/ratio_4/2 +"px";
 
             cell = document.getElementById("right_arrow_pos_"+i);
-            cell.style.width = w/(this.field_side+4) +"px";
-            cell.style.height = w/(this.field_side+4) +"px";
-            cell.style.top = w/(this.field_side+4)*(i+2) +"px";
-            cell.style.left = w/(this.field_side+4) * (this.field_side+2) +"px";
+            cell.style.width = w/ratio_4 +"px";
+            cell.style.height = w/ratio_4 +"px";
+            cell.style.top = w/ratio_4*(i+2) +"px";
+            cell.style.left = w/ratio_4 * (this.field_side+2) +"px";
             cell.style.color="blue";
             cell.style.border = "0.1vmin solid #0000FF";
             cell.style.marginLeft="2vmin";
-            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+            cell.style.fontSize=w/ratio_4/2 +"px";
 
             cell = document.getElementById("up_arrow_pos_"+i);
-            cell.style.width = w/(this.field_side+4) +"px";
-            cell.style.height = w/(this.field_side+4) +"px";
-            cell.style.top = w/(this.field_side+4) - vmin(2) +"px";
-            cell.style.left = w/(this.field_side+4) * (i+2) +"px";
+            cell.style.width = w/ratio_4 +"px";
+            cell.style.height = w/ratio_4 +"px";
+            cell.style.top = w/ratio_4 - vmin(2) +"px";
+            cell.style.left = w/ratio_4 * (i+2) +"px";
             cell.style.color="orange";
             cell.style.border = "0.1vmin solid #FFA500";
             cell.style.marginBottom="4vmin";
-            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+            cell.style.fontSize=w/ratio_4/2 +"px";
 
             cell = document.getElementById("down_arrow_pos_"+i);
-            cell.style.width = w/(this.field_side+4) +"px";
-            cell.style.height = w/(this.field_side+4) +"px";
-            cell.style.top = w/(this.field_side+4)*(this.field_side+2) +"px";
-            cell.style.left = w/(this.field_side+4) * (i+2) +"px";
+            cell.style.width = w/ratio_4 +"px";
+            cell.style.height = w/ratio_4 +"px";
+            cell.style.top = w/ratio_4*(parseInt(this.field_side)+2) +"px";
+            cell.style.left = w/ratio_4 * (i+2) +"px";
             cell.style.color="red";
             cell.style.border = "0.1vmin solid #FF0000";
             cell.style.marginTop="2vmin";
-            cell.style.fontSize=w/(this.field_side+4)/2 +"px";
+            cell.style.fontSize=w/ratio_4/2 +"px";
         }
 
 
@@ -202,7 +206,6 @@ class Field {
     }
 
     atomary_shift(index,direction) {
-        console.log(`Shifting ${index} ${direction}`);
         if (direction == 'left') {
             var new_string =new Array(this.field_side).fill({x:-1,y:-1});
             for (var i = 0; i < this.field_side; i++) {
@@ -240,6 +243,10 @@ class Field {
             }
         }
 
+    }
+
+    getShiftCount() {
+        return this.shift_count;
     }
 
     shift(id) {
@@ -288,7 +295,6 @@ class Field {
             for (let j = 0; j < this.field_side; j++) {
                 if (this.tiles[i][j].isMisplaced()) {
                     isMismatched = true;
-                    console.log("Mismatched!");
                     return false;
                 }
             }

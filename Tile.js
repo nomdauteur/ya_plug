@@ -10,7 +10,6 @@ class Tile {
     }
 
     isMisplaced() {
-        console.log(`(${this.original_place.x},${this.original_place.y}) VS (${this.current_place.x},${this.current_place.y})`);
         return (this.original_place.x != this.current_place.x || this.original_place.y != this.current_place.y);
     }
 
@@ -40,7 +39,7 @@ class Tile {
     }
 
     value() {
-        return this.original_place.y * this.field_side + this.original_place.x;
+        return this.original_place.y * this.field_side + this.original_place.x +1;
     }
 
 }
