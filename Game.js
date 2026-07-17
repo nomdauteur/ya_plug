@@ -38,4 +38,6 @@ function setLangText() {
         setText("Число сдвигов:","Shifts number:");
     document.getElementById("changeButton").textContent=setText("Новая игра","New game");
     document.getElementById("progress").textContent=setText("Ваши сдвиги: ","Your shifts: ")+theField.getShiftCount();
+    document.getElementById("header").textContent=setText("Квадрат Рубика","Rubik's Square");
+    document.getElementById("hint").innerHTML="<i>"+setText("Двигайте квадраты стрелками, чтобы расставить их по порядку.","Move the tiles with arrows to restore their order.")+"</i>";
 }
