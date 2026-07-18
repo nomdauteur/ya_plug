@@ -5,7 +5,7 @@ var SIDE;
 
 var lastAdShown;
 
-ya_flag=0;
+
 
 SIDE=vmin(15);
 
@@ -250,6 +250,7 @@ class Field {
     }
 
     shift(id) {
+        if (!window.isPlaying) return;
         this.shift_count+=1;
         document.getElementById("progress").textContent=setText("Ваши сдвиги: ","Your shifts: ")+theField.getShiftCount()
         var splitted = id.split('_');
@@ -307,6 +308,7 @@ class Field {
             let stars_emojis = String.fromCodePoint(11088).repeat(stars);
             document.getElementById("progress").textContent=setText("Вы победили. Ваш результат: ","You won. Your result: ")
                 +stars_emojis+ `(${this.shift_count}/${window.shiftsNo})` + setText(". Сыграйте еще раз!", ". Play again!");
+            window.isPlaying=false;
             return true;
         }
     }
