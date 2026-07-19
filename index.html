@@ -1,0 +1,71 @@
+<!DOCTYPE>
+<!--<html oncontextmenu="return false">-->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--<meta http-equiv="refresh" content="0.5" > -->
+    <meta name="Description" CONTENT="Proofreader Simulator">
+    <meta name="viewport" content="height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!--<script src="/sdk.js"></script>-->
+    <title>Proofreader Simulator</title>
+
+    <!--Path from the root, not from template folder, BC gets mover anyway-->
+    <link href="general_functions/general_style_helper.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="general_functions/data_tools.js"></script>
+    <script src="general_functions/interface_helpers.js"></script>
+    <script src="general_functions/math_handlers.js"></script>
+    <script src="general_functions/mouse_handlers.js"></script>
+    <script src="general_functions/style_helpers.js"></script>
+    <script src="general_functions/text_helpers.js"></script>
+    <script src="general_functions/YA.js"></script>
+    <script src="Levels.js"></script>
+    <script src="Text.js"></script>
+    <script src="Game.js"></script>
+
+</head>
+<body id = "body" style="background: radial-gradient(circle at 60% 40%, #aa8d59, #568c4a);">
+<div style="position:fixed;" id = "upper">
+    <h1 id="header"  style="margin-left:2vmin"></h1>
+    <div id="hint" style="font-size:2vmin;margin-left:2vmin"></div>
+
+</div>
+<div style="position:fixed;" class="game" id="canvas">
+    <!--<textarea rows="25" cols="40" id="text" readonly></textarea>-->
+</div>
+
+<div style="position:fixed;" id = "lower">
+   <!-- <div id="progress"></div>
+    <details><summary>Выбрать параметры новой игры</summary>
+        <div class="tabs">
+            <div class="tab dropdown-group">
+                <label class="dropdown-label" for="fieldSizeSelect"></label>
+                <select class="dropdown" id="fieldSizeSelect" onchange="setFieldSize()">
+                    <option value="5">5</option>
+                    <option selected value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+
+            <div class="tab dropdown-group">
+                <label class="dropdown-label" for="shiftsNoSelect"></label>
+                <select class="dropdown" id="shiftsNoSelect" onchange="setMovesNo()">
+                    <option value="5">5</option>
+                    <option selected value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
+    </details>
+    <button id="changeButton" onclick="newGame()">Новая игра</button>-->
+</div>
+
+<p id="lang" style="bottom:0; left:95vw; position:fixed; display:none;">EN</p>
+
+</body>
+
+
+</html>

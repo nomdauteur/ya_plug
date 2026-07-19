@@ -6,3 +6,12 @@ function setText(textRu, textEn) {
     else return textEn;
 }
 
+function indicesOf(string, symbol) {
+    let indices = [];
+    for (let i = 0; i < string.length; i++) {
+        if (string[i] === symbol) {
+            indices.push(i);
+        }
+    }
+    return indices;
+}
